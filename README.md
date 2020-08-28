@@ -53,16 +53,16 @@ To get a local copy up and running follow these simple steps.
 ### Prerequisites
 
 These are list of things you need to have before you use the project and how to install them.
-* Python
-Download the Python installer [here](https://www.python.org/downloads/) (preferably Python 3.8)
+* Python<br>
+Download the Python installer [here](https://www.python.org/downloads/) (preferably Python 3.8)<br>
 Run the installer
-* Text Editor
+* Text Editor<br>
 You can choose any text editor that suits you the most, but I reccomend using Visual Studio Code
-Download the VSCode installer [here](https://code.visualstudio.com/download)
+Download the VSCode installer [here](https://code.visualstudio.com/download)<br>
 Run the installer
 
 ## Installation
-To get started, Install the requirements.txt
+To get started, Install the requirements.txt<br>
 You can use any virtual environment you want, but I prefer [virtualenv](https://pypi.org/project/virtualenv/)
 
 __1. Setting Up Virtual Environment__<br>
