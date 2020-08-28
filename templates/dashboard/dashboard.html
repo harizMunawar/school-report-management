@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    Hello, {{ user.username|default:'Guest' }}! <br>
+    Anda adalah seorang {{user.level}}
+    INI DASHBOARD KELAS {{kelas}}
+
+    <div>
+        <a href="{% url 'logout' %}">Logout</a>
+    </div>
+
+    {% if user.level == 'G' %}
+        <h2>List murid yang walikan</h2>
+        {% for account in siswa %}
+            <p>{{account.nama}} &nbsp;{{account.user.nomor_induk}}</p><br>
+        {% endfor %}
+
+    {% elif user.level == 'S' %}
+        <h2>Walikelas anda</h2>
+        {{walikelas}}
+    {% else %}
+
+    {% endif %}
+    
+
+{% endblock content %}
