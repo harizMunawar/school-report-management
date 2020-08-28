@@ -65,13 +65,13 @@ Run the installer
 To get started, Install the requirements.txt
 You can use any virtual environment you want, but I prefer [virtualenv](https://pypi.org/project/virtualenv/)
 
-__1. Setting Up Virtual Environment__
+__1. Setting Up Virtual Environment__<br>
 Open terminal in the root directory of this project
 ```
 pip install virtualenv env-report
 ```
 
-__2. Activate Your Virtual Environment__
+__2. Activate Your Virtual Environment__<br>
 For Windows
 ```
 cd env-report/Scripts
@@ -83,19 +83,19 @@ cd env-report/bin
 activate
 ```
 
-__3. Install The requirements.txt__
+__3. Install The requirements.txt__<br>
 In the root directory of this project
 ```
 pip install -r requirements.txt
 ```
 
-__4. Migrating The Models__
+__4. Migrating The Models__<br>
 In the root directory of this project
 ```
 manage.py migrate
 ```
 
-__5. Create SuperUser Account__
+__5. Create SuperUser Account__<br>
 In the root directory of this project
 ```
 manage.py createsuperuser
@@ -103,7 +103,7 @@ manage.py createsuperuser
 You can input any data for the superuser account
 <p style="color: red; font-weight: bold">BUT PLEASE INSERT 'A' AS A LEVEL FOR THE USER</p>
 
-__6. Running The Server__
+__6. Running The Server__<br>
 In the root directory of this project
 ```
 manage.py runserver
@@ -111,7 +111,7 @@ manage.py runserver
 Default port is 8000, so access the [server](127.0.0.1:8000) there
 
 ### Admin Site
-To access the admin site visit the <text style="background-color: #A9A9A9; padding: 3px; border-radius: 4px; color: white">/admin</text> url
+To access the admin site visit the <text style="background-color: #A9A9A9; padding: 3px; border-radius: 4px; color: white">/admin</text> url<br>
 You will need your "Nomor Induk" & "Password" from [step 5](#installation) as a login authentication
 
 ## Our Team
