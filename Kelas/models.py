@@ -27,7 +27,7 @@ class Kelas(models.Model):
     kelas = models.CharField(max_length=1, choices=HURUF_LIST)
     nama = models.CharField(max_length=15, null=True, blank=True)
     matapelajaran = models.ManyToManyField("Nilai.MataPelajaran", related_name='kelas')
-    walikelas = models.OneToOneField("User.Guru", on_delete=models.SET_NULL, null=True, blank=True)
+    walikelas = models.OneToOneField("User.Guru", on_delete=models.SET_NULL, null=True, blank=True, related_name='kelas')
 
     def save(self, *args, **kwargs):
         self.nama = f'{self.tingkat} {self.jurusan} {self.kelas}'

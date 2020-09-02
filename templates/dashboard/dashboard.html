@@ -19,6 +19,15 @@
     {% elif user.level == 'S' %}
         <h2>Walikelas anda</h2>
         {{walikelas}}
+
+        <br><br>
+        <h1>Nilai Anda</h1>
+        
+        {% for dict in skor %}
+            {% for pelajaran, nilai in dict.items %}
+                <p>{{pelajaran}}: {{nilai}}</p>
+            {% endfor %}        
+        {% endfor %}
     {% else %}
 
     {% endif %}

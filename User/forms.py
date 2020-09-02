@@ -7,11 +7,11 @@ class DateInput(forms.DateInput):
     input_type = 'date'
 
 class RegistrationForm(UserCreationForm):
-    nomor_induk = forms.CharField(max_length=18, help_text='Tolong masukan NIP(guru)/NIS(siswa)')
+    nomor_induk = forms.CharField(max_length=18, help_text='Tolong masukan NIP(guru)/NISN(siswa)')
 
     class Meta:
         model = User
-        fields = ("nomor_induk", "level", "username", "password1", "password2")
+        fields = ("nomor_induk", "level", "password1", "password2")
 
     def save(self, commit=True):
         user = super().save(commit=False)
@@ -25,7 +25,7 @@ class UserChangeForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ('nomor_induk', 'level', 'username', 'password', 'is_active')
+        fields = ('nomor_induk', 'level', 'password', 'is_active')
 
     def clean_password(self):
         return self.initial["password"]
@@ -34,7 +34,7 @@ class UserChangeForm(forms.ModelForm):
 class GuruForm(forms.ModelForm):
     class Meta:
         model = Guru        
-        fields = ('nama', 'tanggal_lahir')
+        fields = ('nama', 'gender', 'tanggal_lahir')
         widgets = {
             'tanggal_lahir': DateInput()
         }
@@ -42,7 +42,7 @@ class GuruForm(forms.ModelForm):
 class SiswaForm(forms.ModelForm):
     class Meta:
         model = Siswa        
-        fields = ('nama', 'tanggal_lahir', 'kelas')
+        fields = ('nis', 'nama',  'gender', 'tanggal_lahir', 'kelas')
         widgets = {
             'tanggal_lahir': DateInput()
         }

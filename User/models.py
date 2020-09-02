@@ -8,9 +8,13 @@ from datetime import datetime
 class UserManager(BaseUserManager):
     def create_user(self, nomor_induk, level, username, password=None):
         if not nomor_induk or not level or not username:
-            raise ValueError("Data is not complete")
-        
+            raise ValueError("Data is not complete")        
+
         user = self.model(nomor_induk = nomor_induk, level = level, username = username,)
+        if user.level == 'A':
+            user.is_admin = True
+            user.is_staff = True
+            user.is_superuser = True            
         user.set_password(password)
         user.save(using=self._db)
         return user
@@ -46,7 +50,7 @@ class User(AbstractBaseUser):
     objects = UserManager()
 
     def __str__(self):
-        return self.username
+        return self.nomor_induk
 
     def has_perm(self, perm, obj=None):
         return self.is_admin
@@ -54,22 +58,41 @@ class User(AbstractBaseUser):
     def has_module_perms(self, app_label):
         return True
 
+
+GENDER_LIST = [
+    ('P', 'Pria'),
+    ('W', 'Wanita'),
+]
+
 class Guru(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='akun_guru', null=True, blank=True)
+    nip = models.CharField(unique=True, max_length=18, editable=False)
     nama = models.CharField(max_length=50, null=True, blank=True)
     tanggal_lahir = models.DateField(null=True, blank=True)
+    gender = models.CharField(max_length=2, choices=GENDER_LIST, default=GENDER_LIST[0][0])
+
+    def save(self, *args, **kwargs):
+        self.nip = f'{self.user.nomor_induk}'
+        super(Guru, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.nama
 
 class Siswa(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='akun_siswa', null=True, blank=True) 
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='akun_siswa', null=True, blank=True)    
     nama = models.CharField(max_length=50, null=True, blank=True)
+    gender = models.CharField(max_length=2, choices=GENDER_LIST, default=GENDER_LIST[0][0], null=True)
+    nis = models.CharField(max_length=9, unique=True)
+    nisn = models.CharField(max_length=10, unique=True, editable=False,)
     tanggal_lahir = models.DateField(null=True, blank=True)
     kelas = models.ForeignKey("Kelas.Kelas", on_delete=models.PROTECT, related_name='siswa', null=True, blank=True)    
 
+    def save(self, *args, **kwargs):
+        self.nisn = f'{self.user.nomor_induk}'
+        super(Siswa, self).save(*args, **kwargs)
+
     def __str__(self):
-        return self.nama
+        return self.nama    
 
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
