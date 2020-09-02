@@ -11,17 +11,17 @@ class UserAdmin(BaseUserAdmin):
     form = UserChangeForm
     add_form = UserCreationForm
     
-    list_display = ('nomor_induk', 'level')
+    list_display = ('username', 'nomor_induk', 'level')
     list_filter = ('level',)
     fieldsets = (
-        ('Account Profile', {'fields': ('nomor_induk', 'password')}),
+        ('Account Profile', {'fields': ('nomor_induk', 'username', 'password')}),
         ('Account Status', {'fields': ('is_active',)})
     )
 
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('nomor_induk', 'level', 'password1', 'password2'),
+            'fields': ('nomor_induk', 'username', 'level', 'password1', 'password2'),
         }),
     )
     search_fields = ('nomor_induk',)
@@ -37,14 +37,17 @@ class GuruAdmin(admin.ModelAdmin):
     )
     readonly_fields = ('nip',)
     search_fields = ('nip', 'nama')
+    ordering = ('nama',)
     
 @admin.register(Siswa)
 class SiswaAdmin(admin.ModelAdmin):
     list_display = ('nama', 'nisn', 'nis', 'gender', 'kelas')
+    list_filter = ('kelas', 'gender')
     fieldsets = (
         ('Profil Siswa', {'fields': ('user', 'nis', 'nama', 'gender', 'tanggal_lahir', 'kelas')}),        
     )
     readonly_fields = ('nisn',)
+    ordering=('nama', 'kelas')
 
 admin.site.unregister(Group)
 

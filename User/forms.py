@@ -11,7 +11,7 @@ class RegistrationForm(UserCreationForm):
 
     class Meta:
         model = User
-        fields = ("nomor_induk", "level", "password1", "password2")
+        fields = ("nomor_induk", "username", "level", "password1", "password2")
 
     def save(self, commit=True):
         user = super().save(commit=False)
@@ -25,7 +25,7 @@ class UserChangeForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ('nomor_induk', 'level', 'password', 'is_active')
+        fields = ('nomor_induk', 'username', 'level', 'password', 'is_active')
 
     def clean_password(self):
         return self.initial["password"]

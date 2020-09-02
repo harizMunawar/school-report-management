@@ -33,6 +33,7 @@ class GuruRegistration(View):
         
             user.akun_guru.nama = guru_form.cleaned_data.get('nama')
             user.akun_guru.tanggal_lahir = guru_form.cleaned_data.get('tanggal_lahir')
+            user.akun_guru.gender = guru_form.cleaned_data.get('gender')
             user.akun_guru.save()
                         
             nomor_induk = user_form.cleaned_data.get('nomor_induk')
@@ -72,6 +73,7 @@ class SiswaRegistration(View):
             user.akun_siswa.nama = siswa_form.cleaned_data.get('nama')
             user.akun_siswa.nis = siswa_form.cleaned_data.get('nis')
             user.akun_siswa.tanggal_lahir = siswa_form.cleaned_data.get('tanggal_lahir')
+            user.akun_siswa.gender = siswa_form.cleaned_data.get('gender')
             user.akun_siswa.kelas = siswa_form.cleaned_data.get('kelas')
             user.akun_siswa.jurusan = siswa_form.cleaned_data.get('jurusan')
             
@@ -80,9 +82,9 @@ class SiswaRegistration(View):
             nomor_induk = user_form.cleaned_data.get('nomor_induk')
             raw_password = user_form.cleaned_data.get('password1')
 
-            account = authenticate(nomor_induk=nomor_induk, password=raw_password)
-            login(request, account)
-            return redirect('dashboard')
+            # account = authenticate(nomor_induk=nomor_induk, password=raw_password)
+            # login(request, account)
+            return redirect('regis_siswa')
         else:
             context = {
                 'user_form' : user_form,
