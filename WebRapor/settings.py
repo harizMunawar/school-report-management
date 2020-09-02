@@ -1,5 +1,5 @@
 from pathlib import Path
-
+import django_heroku
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
 
@@ -13,7 +13,7 @@ SECRET_KEY = '09(7c9yo7(ui323%-)#eyd6asgmiho&_eh=-#ypi=vrp6w8uig'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'https://django-covid.herokuapp.com/']
 
 
 # Application definition
@@ -128,3 +128,4 @@ LOGIN_REDIRECT_URL = 'dashboard'
 LOGOUT_REDIRECT_URL = 'login'
 
 LOGIN_URL = 'login'
+django_heroku.settings(locals())
