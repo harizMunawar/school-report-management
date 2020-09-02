@@ -20,10 +20,11 @@ class GuruSerializers(serializers.ModelSerializer):
         fields = ['nama', 'nip', 'tanggal_lahir', 'gender']
 
 class KelasSerializers(serializers.ModelSerializer):
+    matapelajaran = MataPelajaranSerializers(required=True, many=True)
     walikelas = GuruSerializers(required=True)
     class Meta:
         model = Kelas
-        fields = ['nama', 'walikelas']
+        fields = ['nama', 'walikelas', 'matapelajaran']
 
 class SiswaSerializers(serializers.ModelSerializer):
     kelas = KelasSerializers(required=True)
