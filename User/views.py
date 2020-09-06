@@ -1,7 +1,6 @@
 from django.shortcuts import render, redirect
 from django.views.generic import View
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth import login, authenticate
 from User.forms import RegistrationForm, GuruForm, SiswaForm
 
 from User.models import User, Siswa, Guru
@@ -9,89 +8,8 @@ from Kelas.models import Jurusan, Kelas
 from Nilai.models import MataPelajaran, NilaiMataPelajaran
 
 from django.core.exceptions import ObjectDoesNotExist
+from django.http import Http404
 from collections import Counter
-
-class GuruRegistration(View):
-    def get(self, request):        
-        user_form = RegistrationForm()
-        guru_form = GuruForm()
-
-        context = {
-            'user_form' : user_form,
-            'guru_form' : guru_form,
-        }
-
-        return render(request, 'registration/register.html', context)
-
-    def post(self, request):
-        user_form = RegistrationForm(request.POST)
-        guru_form = GuruForm(request.POST)
-
-        if user_form.is_valid() and guru_form.is_valid():
-            user = user_form.save(commit=False)
-            user.save()
-        
-            user.akun_guru.nama = guru_form.cleaned_data.get('nama')
-            user.akun_guru.tanggal_lahir = guru_form.cleaned_data.get('tanggal_lahir')
-            user.akun_guru.gender = guru_form.cleaned_data.get('gender')
-            user.akun_guru.save()
-                        
-            nomor_induk = user_form.cleaned_data.get('nomor_induk')
-            raw_password = user_form.cleaned_data.get('password1')
-
-            account = authenticate(nomor_induk=nomor_induk, password=raw_password)
-            login(request, account)
-            return redirect('login')
-        else:
-            context = {
-                'user_form' : user_form,
-                'guru_form' : guru_form,
-            }
-
-            return render(request, 'registration/register.html', context)
-        
-class SiswaRegistration(View):
-    def get(self, request):        
-        user_form = RegistrationForm()
-        siswa_form = SiswaForm()
-
-        context = {
-            'user_form' : user_form,
-            'siswa_form' : siswa_form,
-        }
-
-        return render(request, 'registration/register.html', context)
-
-    def post(self, request):
-        user_form = RegistrationForm(request.POST)
-        siswa_form = SiswaForm(request.POST)
-
-        if user_form.is_valid() and siswa_form.is_valid():
-            user = user_form.save(commit=False)
-            user.save()
-
-            user.akun_siswa.nama = siswa_form.cleaned_data.get('nama')
-            user.akun_siswa.nis = siswa_form.cleaned_data.get('nis')
-            user.akun_siswa.tanggal_lahir = siswa_form.cleaned_data.get('tanggal_lahir')
-            user.akun_siswa.gender = siswa_form.cleaned_data.get('gender')
-            user.akun_siswa.kelas = siswa_form.cleaned_data.get('kelas')
-            user.akun_siswa.jurusan = siswa_form.cleaned_data.get('jurusan')
-            
-            user.akun_siswa.save()
-
-            nomor_induk = user_form.cleaned_data.get('nomor_induk')
-            raw_password = user_form.cleaned_data.get('password1')
-
-            # account = authenticate(nomor_induk=nomor_induk, password=raw_password)
-            # login(request, account)
-            return redirect('regis_siswa')
-        else:
-            context = {
-                'user_form' : user_form,
-                'siswa_form' : siswa_form,
-            }
-
-            return render(request, 'registration/register.html', context)
 
 @login_required
 def dashboard(request):
@@ -103,7 +21,7 @@ def dashboard(request):
             kelas = Kelas.objects.get(walikelas=guru.id)
             list_siswa = Siswa.objects.filter(kelas=kelas.id)            
         except ObjectDoesNotExist:
-            active_kelas = None
+            kelas = None
             list_siswa = None
 
         context = {
@@ -131,15 +49,72 @@ def dashboard(request):
                         pel_nilai.append({pel['nama']: 0})
                 else:
                     for pel, nil in zip(pel, nil):
-                        pel_nilai.append({pel['nama']: nil['nilai']})                  
+                        pel_nilai.append({pel['nama']: nil['nilai']})     
         except ObjectDoesNotExist:
-            active_kelas = None
-            walikelas = None
+            kelas = None
+            pel_nilai = None
 
         context = {
-            'kelas': kelas,
-            'walikelas': kelas.walikelas,
-            'skor' : pel_nilai,
+                'kelas': kelas,
+                'skor' : pel_nilai,
         }
 
     return render(request, 'dashboard/dashboard.html', context)
+
+class Registration(View):
+    def get(self, request, level=''):
+        user_form = RegistrationForm()
+        level = level.lower()
+        if level == 'guru' or level == 'g':
+            extra_form = GuruForm()
+        elif level == 'siswa' or level == 'g':
+            extra_form = SiswaForm()
+        else:
+            raise Http404
+
+        context = {
+            'user_form' : user_form,
+            'extra_form' : extra_form,
+        }
+
+        return render(request, 'registration/register.html', context)
+
+    def post(self, request, level=''):
+        user_form = RegistrationForm(request.POST)
+        level = level.lower()
+        if level == 'guru' or level == 'g':
+            extra_form = GuruForm(request.POST)
+        elif level == 'siswa' or level == 'g':
+            extra_form = SiswaForm(request.POST)
+        else:
+            raise Http404
+
+        if user_form.is_valid() and extra_form.is_valid():
+            username = f"{level.upper()[0]}-{user_form.cleaned_data.get('nomor_induk')}-{extra_form.cleaned_data.get('nama').lower().split(' ')[0]}"
+            user = user_form.save(commit=False)
+            user.username = username
+            user.level = level.upper()[0]
+            user.save()
+
+            if level == 'siswa' or level == 's':
+                user.akun_siswa.nama = extra_form.cleaned_data.get('nama')
+                user.akun_siswa.nis = extra_form.cleaned_data.get('nis')
+                user.akun_siswa.tanggal_lahir = extra_form.cleaned_data.get('tanggal_lahir')
+                user.akun_siswa.gender = extra_form.cleaned_data.get('gender')
+                user.akun_siswa.kelas = extra_form.cleaned_data.get('kelas')
+                user.akun_siswa.jurusan = extra_form.cleaned_data.get('jurusan')
+                user.akun_siswa.save()
+
+            elif level == 'guru' or level == 'g':
+                user.akun_guru.nama = extra_form.cleaned_data.get('nama')
+                user.akun_guru.tanggal_lahir = extra_form.cleaned_data.get('tanggal_lahir')
+                user.akun_guru.gender = extra_form.cleaned_data.get('gender')
+                user.akun_guru.save()
+
+            return redirect('dashboard')
+        else:
+            context = {
+                'user_form' : user_form,
+                'extra_form' : extra_form,
+            }
+            return render(request, 'registration/register.html', context)

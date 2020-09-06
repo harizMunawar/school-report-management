@@ -17,8 +17,11 @@
         {% endfor %}
 
     {% elif user.level == 'S' %}
-        <h2>Walikelas anda</h2>
-        {{walikelas}}
+        {% if kelas %}
+            <h2>Walikelas anda</h2>
+            {{kelas.walikelas}}
+        {% endif %}
+        
 
         <br><br>
         <h1>Nilai Anda</h1>

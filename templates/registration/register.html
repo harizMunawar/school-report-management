@@ -16,11 +16,10 @@
             {% endfor %}
         {% endfor %}
 
-        {% if guru_form %}
-            {{ guru_form.as_p }}
-        {% else %}
-            {{ siswa_form.as_p }}
-        {% endif %}
+        {% for field in extra_form %}
+            <p>{{field.label_tag}}</p>
+            <p>{{field}}</p>
+        {% endfor %}
         <button type="submit">Register</button>
     </form>
 {% endblock content %}

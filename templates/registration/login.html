@@ -6,8 +6,8 @@
     {% csrf_token %}
     {{ form.as_p }}
     <input type="submit" value="Login">
-    <a href="{% url 'regis_guru' %}">Buat Akun Guru</a><br>
-    <a href="{% url 'regis_siswa' %}">Buat Akun Siswa</a>
+    <a href="{% url 'registration' %}guru">Buat Akun Guru</a><br>
+    <a href="{% url 'registration' %}siswa">Buat Akun Siswa</a>
 </form>
 
 <a href="{% url 'dashboard' %}">Back to dashboard</a>
