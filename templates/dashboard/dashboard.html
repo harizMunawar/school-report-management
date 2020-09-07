@@ -12,8 +12,8 @@
 
     {% if user.level == 'G' %}
         <h2>List murid yang walikan</h2>
-        {% for account in siswa %}
-            <p>{{account.nama}} &nbsp;{{account.user.nomor_induk}}</p><br>
+        {% for siswa in siswa %}
+            <p><a href="{% url 'list_nilai' %}?nisn={{siswa.nisn}}">{{siswa.nama}}</a> &nbsp;{{siswa.nisn}}</p><br>
         {% endfor %}
 
     {% elif user.level == 'S' %}
@@ -26,10 +26,8 @@
         <br><br>
         <h1>Nilai Anda</h1>
         
-        {% for dict in skor %}
-            {% for pelajaran, nilai in dict.items %}
-                <p>{{pelajaran}}: {{nilai}}</p>
-            {% endfor %}        
+        {% for id, pelajaran, nilai in data %}
+            <p>{{id}}-{{pelajaran}}: {{nilai}}</p>
         {% endfor %}
     {% else %}
 

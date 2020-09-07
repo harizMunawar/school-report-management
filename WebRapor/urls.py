@@ -8,5 +8,6 @@ urlpatterns = [
     path('api/', include(router.urls)),
     path('', include('django.contrib.auth.urls')),
     path('', include('User.urls')),
+    path('', include('Nilai.urls')),
 ]
 # handler404 = 'backend.views.error_404'

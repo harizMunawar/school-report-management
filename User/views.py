@@ -6,6 +6,7 @@ from User.forms import RegistrationForm, GuruForm, SiswaForm
 from User.models import User, Siswa, Guru
 from Kelas.models import Jurusan, Kelas
 from Nilai.models import MataPelajaran, NilaiMataPelajaran
+from Nilai.views import get_data
 
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404
@@ -19,7 +20,7 @@ def dashboard(request):
         try:      
             guru = Guru.objects.get(user=active_user)
             kelas = Kelas.objects.get(walikelas=guru.id)
-            list_siswa = Siswa.objects.filter(kelas=kelas.id)            
+            list_siswa = Siswa.objects.filter(kelas=kelas.id).order_by('nama')           
         except ObjectDoesNotExist:
             kelas = None
             list_siswa = None
@@ -33,30 +34,14 @@ def dashboard(request):
         try:
             siswa = Siswa.objects.get(user=active_user)
             kelas = Kelas.objects.get(nama=siswa.kelas)
-            walikelas = Guru.objects.get(nama=kelas.walikelas)
-            matapelajaran = MataPelajaran.objects.values('id').filter(kelas=kelas)[::1]
-            list_pelajaran = []
-            pel_nilai = []
-
-            for pelajaran in matapelajaran:
-                list_pelajaran.append(pelajaran['id'])
-
-            for pelajaran in list_pelajaran:
-                pel = MataPelajaran.objects.values('nama').filter(id=pelajaran, kelas=kelas)
-                nil = NilaiMataPelajaran.objects.values('nilai').filter(pelajaran=pelajaran, siswa=siswa)
-                if not nil:
-                    for pel in pel:
-                        pel_nilai.append({pel['nama']: 0})
-                else:
-                    for pel, nil in zip(pel, nil):
-                        pel_nilai.append({pel['nama']: nil['nilai']})     
+            matapelajaran = MataPelajaran.objects.values('id', 'nama').filter(kelas=kelas)[::1]                        
+            data = get_data(siswa, kelas)
         except ObjectDoesNotExist:
             kelas = None
-            pel_nilai = None
-
+            data = None            
         context = {
                 'kelas': kelas,
-                'skor' : pel_nilai,
+                'data' : data,
         }
 
     return render(request, 'dashboard/dashboard.html', context)
@@ -89,10 +74,9 @@ class Registration(View):
         else:
             raise Http404
 
-        if user_form.is_valid() and extra_form.is_valid():
-            username = f"{level.upper()[0]}-{user_form.cleaned_data.get('nomor_induk')}-{extra_form.cleaned_data.get('nama').lower().split(' ')[0]}"
+        if user_form.is_valid() and extra_form.is_valid():            
             user = user_form.save(commit=False)
-            user.username = username
+            user.username = f"{level.upper()[0]}-{user_form.cleaned_data.get('nomor_induk')}-{extra_form.cleaned_data.get('nama').lower().split(' ')[0]}"
             user.level = level.upper()[0]
             user.save()
 

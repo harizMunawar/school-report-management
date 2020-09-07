@@ -2,8 +2,14 @@ from django.db import models
 
 
 class MataPelajaran(models.Model):
+    JENIS_PELAJARAN = [
+        ('NA', 'Normatif Adaptif'),
+        ('Produktif', 'Produktif'),        
+        ('Mulok', 'Muatan Lokal'),
+    ]
     nama = models.CharField(max_length=50)
     kkm = models.PositiveSmallIntegerField()
+    jenis = models.CharField(choices=JENIS_PELAJARAN, default=JENIS_PELAJARAN[0][0], max_length=15)
 
     def __str__(self):
         return self.nama
