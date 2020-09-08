@@ -1,6 +1,5 @@
 from django.shortcuts import render, redirect
 from django.views.generic import View
-from Nilai.forms import NilaiForm
 from Nilai.models import MataPelajaran, NilaiMataPelajaran
 from Kelas.models import Kelas
 from User.models import Siswa
@@ -18,12 +17,17 @@ def get_data(siswa, kelas):
         list_id.append(pelajaran['id'])
         nil = NilaiMataPelajaran.objects.values('nilai').filter(pelajaran=pelajaran['id'], siswa=siswa)
         if not nil:
-            list_nilai.append('0')
+            list_nilai.append(0)
         else:
             for nil in nil:
                 list_nilai.append(nil['nilai'])
 
     return zip(list_id, list_pelajaran, list_nilai)
+
+def get_unzip(siswa, kelas):
+    data = get_data(siswa, kelas)
+    res = list(zip(*data))
+    return res
 
 class ListNilai(View):        
     def get(self, request):        
@@ -31,11 +35,12 @@ class ListNilai(View):
             try:
                 siswa = Siswa.objects.get(nisn=request.GET['nisn'])
                 kelas = Kelas.objects.get(walikelas=request.user.akun_guru)
-                data = get_data(siswa, kelas)
+                data = get_data(siswa, kelas)                
+                
                 context = {
-                    'form': NilaiForm(),
                     'data': data,
                 }
+                
                 return render(request, 'dashboard/list_nilai.html', context)
             except Siswa.DoesNotExist:
                 raise Http404      

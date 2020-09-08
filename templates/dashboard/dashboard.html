@@ -12,8 +12,9 @@
 
     {% if user.level == 'G' %}
         <h2>List murid yang walikan</h2>
-        {% for siswa in siswa %}
-            <p><a href="{% url 'list_nilai' %}?nisn={{siswa.nisn}}">{{siswa.nama}}</a> &nbsp;{{siswa.nisn}}</p><br>
+        {% for siswa, status in data %}
+            <p><a href="{% url 'list_nilai' %}?nisn={{siswa.nisn}}">{{siswa.nama}}</a> &nbsp;{{siswa.nisn}}&nbsp; {% if status == True %}Sudah lengkap {% else %}Belum lengkap{% endif %} </p>
+
         {% endfor %}
 
     {% elif user.level == 'S' %}

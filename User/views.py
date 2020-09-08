@@ -6,7 +6,7 @@ from User.forms import RegistrationForm, GuruForm, SiswaForm
 from User.models import User, Siswa, Guru
 from Kelas.models import Jurusan, Kelas
 from Nilai.models import MataPelajaran, NilaiMataPelajaran
-from Nilai.views import get_data
+from Nilai.views import get_data, get_unzip
 
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404
@@ -20,7 +20,16 @@ def dashboard(request):
         try:      
             guru = Guru.objects.get(user=active_user)
             kelas = Kelas.objects.get(walikelas=guru.id)
-            list_siswa = Siswa.objects.filter(kelas=kelas.id).order_by('nama')           
+            list_siswa = Siswa.objects.filter(kelas=kelas.id).order_by('nama')
+            status = []
+            for siswa in list_siswa:
+                id_, pelajaran, nilai = get_unzip(siswa, kelas)
+                if 0 in nilai:
+                    status.append(False)
+                else:
+                    status.append(True) 
+                
+                   
         except ObjectDoesNotExist:
             kelas = None
             list_siswa = None
@@ -28,6 +37,7 @@ def dashboard(request):
         context = {
             'siswa': list_siswa,
             'kelas': kelas,
+            'data': zip(list_siswa, status)
         }
 
     if active_user.level == 'S':
