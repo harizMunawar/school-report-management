@@ -10,8 +10,7 @@
             {% csrf_token %}
             {% for id, pelajaran, nilai in data %}
                 <p>{{pelajaran}}</p>
-                <input type="text" name="{{id}}" id="{{id}}" placeholder="{{nilai}}" value="{{nilai}}">
-                {{id}}
+                <input type="text" name="{{id}}" id="{{id}}" placeholder="{{nilai}}" value="{{nilai}}">                
                 <br>
             {% endfor %}
             <input type="submit" value="Save">

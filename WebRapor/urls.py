@@ -9,5 +9,6 @@ urlpatterns = [
     path('', include('django.contrib.auth.urls')),
     path('', include('User.urls')),
     path('', include('Nilai.urls')),
+    path('', include('Rapor.urls')),
 ]
 # handler404 = 'backend.views.error_404'
