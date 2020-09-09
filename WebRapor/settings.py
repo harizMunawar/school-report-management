@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     'Kelas',
     'Nilai',
     'REST',
+    'Rapor',
 ]
 
 MIDDLEWARE = [
