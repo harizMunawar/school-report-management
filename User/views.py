@@ -11,6 +11,9 @@ from Nilai.views import get_data, get_unzip
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404
 from collections import Counter
+from django.conf import settings
+from django.contrib.auth import hashers
+import json
 
 @login_required
 def dashboard(request):
@@ -112,3 +115,20 @@ class Registration(View):
                 'extra_form' : extra_form,
             }
             return render(request, 'registration/register.html', context)
+
+def bulk_insert(request):
+    f = open(settings.BASE_DIR/'student.json')
+    data = json.load(f)
+    pointer = 0
+    for data in data:
+        username = f"S-{data['NISN']}-{data['Nama'].upper().split(' ')[0]}"
+        password = hashers.make_password(data['NISN'])
+        account = User.objects.create(nomor_induk=data['NISN'], level='S', username=username, password=password)
+        obj, created = Siswa.objects.update_or_create(
+            user=account, nisn=data['NISN'],
+            defaults={'nama': data['Nama']},
+        )
+        pointer += 1
+        if pointer % 10 == 0:
+            print(f'Total {pointer} rows of data has been inserted successfully')
+    return render(request, 'dashboard/dashboard.html')

@@ -1,15 +1,12 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from django.template import loader
 from django.template.loader import render_to_string
-from django.core.files.storage import FileSystemStorage
 from django.conf import settings
 from weasyprint import HTML
 import tempfile
-
 from Nilai.views import get_unzip, get_data
 from django.views.generic import View
-from User.models import Siswa, Guru
+from User.models import Siswa
 from Kelas.models import Kelas
 
 class ExportPDF(View):

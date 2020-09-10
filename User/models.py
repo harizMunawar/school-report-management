@@ -82,7 +82,6 @@ class Siswa(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='akun_siswa', null=True, blank=True)    
     nama = models.CharField(max_length=50, null=True, blank=True)
     gender = models.CharField(max_length=2, choices=GENDER_LIST, default=GENDER_LIST[0][0], null=True)
-    nis = models.CharField(max_length=9, unique=True)
     nisn = models.CharField(max_length=10, unique=True, editable=False,)
     tanggal_lahir = models.DateField(null=True, blank=True)
     kelas = models.ForeignKey("Kelas.Kelas", on_delete=models.PROTECT, related_name='siswa', null=True, blank=True)    

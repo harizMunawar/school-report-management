@@ -41,10 +41,10 @@ class GuruAdmin(admin.ModelAdmin):
     
 @admin.register(Siswa)
 class SiswaAdmin(admin.ModelAdmin):
-    list_display = ('nama', 'nisn', 'nis', 'gender', 'kelas')
+    list_display = ('nama', 'nisn', 'gender', 'kelas')
     list_filter = ('kelas', 'gender')
     fieldsets = (
-        ('Profil Siswa', {'fields': ('user', 'nis', 'nama', 'gender', 'tanggal_lahir', 'kelas')}),        
+        ('Profil Siswa', {'fields': ('user', 'nama', 'gender', 'tanggal_lahir', 'kelas')}),        
     )
     readonly_fields = ('nisn',)
     ordering=('nama', 'kelas')

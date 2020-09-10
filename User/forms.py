@@ -42,7 +42,7 @@ class GuruForm(forms.ModelForm):
 class SiswaForm(forms.ModelForm):
     class Meta:
         model = Siswa        
-        fields = ('nis', 'nama',  'gender', 'tanggal_lahir', 'kelas')
+        fields = ('nama',  'gender', 'tanggal_lahir', 'kelas')
         widgets = {
             'tanggal_lahir': DateInput()
         }
