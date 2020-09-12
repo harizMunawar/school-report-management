@@ -13,8 +13,20 @@
     {% if user.level == 'G' %}
         <h2>List murid yang walikan</h2>
         {% for siswa, status in data %}
-            <p><a href="{% url 'list_nilai' %}?nisn={{siswa.nisn}}">{{siswa.nama}}</a> &nbsp;{{siswa.nisn}}&nbsp; {% if status == True %}Sudah lengkap <a href="{% url 'export-pdf' %}?nisn={{siswa.nisn}}">Export PDF</a> {% else %}Belum lengkap{% endif %} </p>            
+            <p><a href="{% url 'list_nilai' siswa.nisn %}">{{siswa.nama}}</a> &nbsp;{{siswa.nisn}}&nbsp; 
+                {% if status == True %}
+                    Sudah lengkap 
+                    <a href="{% url 'export-pdf' siswa.nisn %}?action=download">Export PDF</a>
+                    <a href="{% url 'export-pdf' siswa.nisn %}?action=preview">Preview PDF</a> 
+                {% else %}
+                    Belum lengkap
+                {% endif %} 
+            </p>            
         {% endfor %}
+
+        {% if bundle_export == True %}
+            <a href="{% url 'bundle-export' %}">Download Bundle PDF</a>
+        {% endif %}
 
     {% elif user.level == 'S' %}
         {% if kelas %}

@@ -30,10 +30,10 @@ def get_unzip(siswa, kelas):
     return res
 
 class ListNilai(View):        
-    def get(self, request):        
+    def get(self, request, nisn):        
         if request.user.is_authenticated and not request.user.level == 'S':
             try:
-                siswa = Siswa.objects.get(nisn=request.GET['nisn'])
+                siswa = Siswa.objects.get(nisn=nisn)
                 kelas = Kelas.objects.get(walikelas=request.user.akun_guru)
                 data = get_data(siswa, kelas)                
                 
@@ -41,28 +41,33 @@ class ListNilai(View):
                     'data': data,
                 }
                 
-                return render(request, 'dashboard/list_nilai.html', context)
+                return render(request, 'nilai/form_nilai.html', context)
             except Siswa.DoesNotExist:
                 raise Http404      
         else:
             return redirect('dashboard')
     
-    def post(self, request):
+    def post(self, request, nisn):
         if request.user.is_authenticated and not request.user.level == 'S':            
             try:                
-                siswa = Siswa.objects.get(nisn=request.GET['nisn'])
+                siswa = Siswa.objects.get(nisn=nisn)
                 kelas = Kelas.objects.get(walikelas=request.user.akun_guru)
                 data = get_data(siswa, kelas)
-
+                completed = True
                 for id_, pelajaran, nilai in data:
                     matapelajaran = MataPelajaran.objects.filter(id=id_)[0]
                     form_nilai = request.POST.get(f'{id_}')
+                    if form_nilai == '0':
+                        completed = False
                     obj, created = NilaiMataPelajaran.objects.update_or_create(
                         siswa=siswa, pelajaran=matapelajaran, 
                         defaults={'nilai': form_nilai}
                     )
-                    
-                return redirect('dashboard')
+                
+                if completed == True:
+                    return redirect(f'/export-pdf/{nisn}/?action=')
+                else:
+                    return redirect('dashboard')
             except Siswa.DoesNotExist: 
                 raise Http404      
         else:

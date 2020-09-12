@@ -25,13 +25,16 @@ def dashboard(request):
             kelas = Kelas.objects.get(walikelas=guru.id)
             list_siswa = Siswa.objects.filter(kelas=kelas.id).order_by('nama')
             status = []
+            bundle_export = True
             for siswa in list_siswa:
                 id_, pelajaran, nilai = get_unzip(siswa, kelas)
                 if 0 in nilai:
                     status.append(False)
                 else:
-                    status.append(True) 
-                
+                    status.append(True)
+
+            if False in status:
+                bundle_export = False              
                    
         except ObjectDoesNotExist:
             kelas = None
@@ -40,7 +43,8 @@ def dashboard(request):
         context = {
             'siswa': list_siswa,
             'kelas': kelas,
-            'data': zip(list_siswa, status)
+            'data': zip(list_siswa, status),
+            'bundle_export': bundle_export,
         }
 
     if active_user.level == 'S':
@@ -57,7 +61,7 @@ def dashboard(request):
                 'data' : data,
         }
 
-    return render(request, 'dashboard/dashboard.html', context)
+    return render(request, 'user/dashboard/dashboard.html', context)
 
 class Registration(View):
     def get(self, request, level=''):
@@ -75,7 +79,7 @@ class Registration(View):
             'extra_form' : extra_form,
         }
 
-        return render(request, 'registration/register.html', context)
+        return render(request, 'user/registration/register.html', context)
 
     def post(self, request, level=''):
         user_form = RegistrationForm(request.POST)
@@ -88,8 +92,8 @@ class Registration(View):
             raise Http404
 
         if user_form.is_valid() and extra_form.is_valid():            
-            user = user_form.save(commit=False)
-            user.username = f"{level.upper()[0]}-{user_form.cleaned_data.get('nomor_induk')}-{extra_form.cleaned_data.get('nama').lower().split(' ')[0]}"
+            user = user_form.save(commit=False)            
+            user.username = f"{level.upper()[0]}-{extra_form.cleaned_data.get('nama').title().split(' ')[-1]}-{user_form.cleaned_data.get('nomor_induk')}"
             user.level = level.upper()[0]
             user.save()
 
@@ -114,21 +118,23 @@ class Registration(View):
                 'user_form' : user_form,
                 'extra_form' : extra_form,
             }
-            return render(request, 'registration/register.html', context)
+            return render(request, 'user/registration/register.html', context)
 
 def bulk_insert(request):
     f = open(settings.BASE_DIR/'student.json')
     data = json.load(f)
     pointer = 0
     for data in data:
-        username = f"S-{data['NISN']}-{data['Nama'].upper().split(' ')[0]}"
-        password = hashers.make_password(data['NISN'])
-        account = User.objects.create(nomor_induk=data['NISN'], level='S', username=username, password=password)
-        obj, created = Siswa.objects.update_or_create(
-            user=account, nisn=data['NISN'],
-            defaults={'nama': data['Nama']},
-        )
-        pointer += 1
-        if pointer % 10 == 0:
-            print(f'Total {pointer} rows of data has been inserted successfully')
-    return render(request, 'dashboard/dashboard.html')
+        if data['Akronim'] == 'RPL':
+            username = f"S-{data['Nama'].title().split(' ')[-1]}-{data['NISN']}"
+            password = hashers.make_password(data['NISN'])
+            account = User.objects.create(nomor_induk=data['NISN'], level='S', username=username, password=password)
+            obj, created = Siswa.objects.update_or_create(
+                user=account, nisn=data['NISN'],
+                defaults={'nama': data['Nama']},
+            )
+            pointer += 1
+            if pointer % 10 == 0:
+                print(f'Total {pointer} rows of data has been inserted successfully')
+    f.close()
+    return render(request, 'user/dashboard/dashboard.html')

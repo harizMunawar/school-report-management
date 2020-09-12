@@ -1,6 +1,7 @@
-from django.urls import path
+from django.urls import path, re_path
 from . import views
 
 urlpatterns = [
-    path('export-pdf/', views.ExportPDF.as_view(), name="export-pdf"),    
+    re_path(r'^export-pdf(?:/(?P<nisn>[\w-]+))*/$', views.ExportPDF.as_view(), name="export-pdf"),
+    path('bundle-export/', views.BundleExport.as_view(), name="bundle-export")
 ]
