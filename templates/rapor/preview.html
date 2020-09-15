@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -6,8 +7,7 @@
         <title></title>
     </head>
     <body>
-        <object data="../../media/pdf/{{path}}.pdf" type="application/pdf">
-            <embed src="../../media/pdf/{{path}}.pdf" type="application/pdf" />
-        </object>
+        <iframe src="{{path}}" width="400px" height="300px" title="INI PDF"></iframe>
+        <h1>{{path}}</h1>
     </body>
 </html>

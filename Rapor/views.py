@@ -14,7 +14,7 @@ class ExportPDF(View):
     def get(self, request, nisn):        
         siswa = Siswa.objects.get(nisn=nisn)
         data = get_data(siswa, siswa.kelas)
-        pdf_dir = f'{settings.BASE_DIR}/media/pdf/{siswa.kelas}'
+        pdf_dir = f'{settings.BASE_DIR}\media\pdf\{siswa.kelas}'
 
         if not os.path.isdir(pdf_dir): 
             os.makedirs(pdf_dir)
@@ -23,16 +23,15 @@ class ExportPDF(View):
         html = HTML(string=html_string)
         result = html.write_pdf(target=f'{pdf_dir}/{siswa.nama}.pdf')
 
-        if request.GET['action']:
-            if request.GET['action'] == 'download':                
-                with open(f'{pdf_dir}/{siswa.nama}.pdf', 'rb') as result:            
-                    response = HttpResponse(result, content_type='application/pdf;')
-                    response['Content-Disposition'] = f'inline; filename={siswa.nama}.pdf'
-                    response['Content-Transfer-Encoding'] = 'binary'
-                    return response
-            elif request.GET['action'] == 'preview':
-                context = {'path': f'{siswa.kelas}/{siswa.nama}'}
-                return render(request, 'rapor/preview.html', context)
+        if request.GET['action'] == 'download':                
+            with open(f'{pdf_dir}/{siswa.nama}.pdf', 'rb') as result:            
+                response = HttpResponse(result, content_type='application/pdf;')
+                response['Content-Disposition'] = f'inline; filename={siswa.nama}.pdf'
+                response['Content-Transfer-Encoding'] = 'binary'
+                return response
+        elif request.GET['action'] == 'preview':
+            context = {'path': f'{settings.MEDIA_URL}pdf/{siswa.kelas}/{siswa.nama}.pdf'}
+            return render(request, 'rapor/preview.html', context)
         else:
             return redirect('dashboard')
 
