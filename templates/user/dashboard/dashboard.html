@@ -13,7 +13,9 @@
     {% if user.level == 'G' %}
         <h2>List murid yang walikan</h2>
         {% for siswa, status in data %}
-            <p><a href="{% url 'list_nilai' siswa.nisn %}">{{siswa.nama}}</a> &nbsp;{{siswa.nisn}}&nbsp; 
+            <p>
+                <a href="{% url 'list_nilai' siswa.nisn %}">INSERT NILAI {{siswa.nama}}</a><br>
+                <a href="{% url 'edit-siswa' siswa.nisn %}">EDIT {{siswa.nama}}</a><br>
                 {% if status == True %}
                     Sudah lengkap 
                     <a href="{% url 'export-pdf' siswa.nisn %}?action=download">Export PDF</a>
@@ -21,7 +23,7 @@
                 {% else %}
                     Belum lengkap
                 {% endif %} 
-            </p>            
+            </p><br>          
         {% endfor %}
 
         {% if bundle_export == True %}
@@ -44,6 +46,11 @@
 
     {% elif user.level == 'A' %}
         <a href="{% url 'bulk-insert' %}">BULK INSERT NOWWWW</a>
+
+        <h2>List Siswa</h2>
+        {% for siswa in siswa %}
+            <a href="{% url 'edit-siswa' siswa.nisn %}">{{siswa}}</a><br>
+        {% endfor %}
     {% else %}
 
     {% endif %}

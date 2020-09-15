@@ -4,5 +4,6 @@ from . import views
 urlpatterns = [
     path('', views.dashboard, name="dashboard"),
     re_path(r'^register(?:/(?P<level>[\w-]+))*/$', views.Registration.as_view(), name='registration'),
+    re_path(r'^edit/(?P<nisn>[\w-]+)/$', views.EditSiswa.as_view(), name='edit-siswa'),
     path('bulk-insert/', views.bulk_insert, name='bulk-insert')   
 ]

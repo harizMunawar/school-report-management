@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.views.generic import View
+from django.views.generic import View, FormView, DetailView
 from django.contrib.auth.decorators import login_required
 from User.forms import RegistrationForm, GuruForm, SiswaForm
 
@@ -61,6 +61,12 @@ def dashboard(request):
                 'data' : data,
         }
 
+    if active_user.level == 'A':        
+        siswa = Siswa.objects.all()                    
+        context = {
+                'siswa': siswa,                
+        }
+
     return render(request, 'user/dashboard/dashboard.html', context)
 
 class Registration(View):
@@ -119,6 +125,33 @@ class Registration(View):
                 'extra_form' : extra_form,
             }
             return render(request, 'user/registration/register.html', context)
+
+class EditSiswa(DetailView):    
+    model = Siswa
+    template_name = 'user/siswa/detail-siswa.html'
+    slug_field = 'nisn'
+    slug_url_kwarg = 'nisn'
+
+    def post(self, request, nisn):
+        nama = request.POST['nama']
+        gender = request.POST['gender'][0]
+        nisn = request.POST['nisn']
+        tanggal_lahir = request.POST['tanggal_lahir']
+        kelas = Kelas.objects.get(nama=request.POST['kelas'])
+
+        Siswa.objects.update_or_create(
+            nisn=nisn,
+            defaults={
+                'nama': nama,
+                'gender': gender,
+                'nisn': nisn,
+                'tanggal_lahir': tanggal_lahir,
+                'kelas': kelas,
+                },
+        )
+        return redirect('dashboard')
+
+
 
 def bulk_insert(request):
     f = open(settings.BASE_DIR/'student.json')

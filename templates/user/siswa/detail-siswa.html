@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    {{ object.nama }}
+
+    <form method="post">
+        {% csrf_token %}
+        <label for="nama">Nama</label><br>
+        <input type="text" name="nama" id="nama" value="{{object.nama}}"><br>
+        
+
+        <input type="radio" id="male" name="gender" value="Pria" checked="checked">
+        <label for="male">Pria</label><br>
+        <input type="radio" id="female" name="gender" value="Wanita">
+        <label for="female">Wanita</label><br>
+
+        <label for="nisn">NISN</label><br>
+        <input type="text" name="nisn" id="nisn" value="{{object.nisn}}"><br>
+
+        <label for="tanggal_lahir">Tanggal Lahir</label><br>
+        <input type="date" name="tanggal_lahir" id="tanggal_lahir" value="{{object.tanggal_lahir|date:'Y-m-d'}}"><br>
+        
+
+        <label for="kelas">Kelas</label><br>
+        <input type="text" name="kelas" id="kelas" value="{{object.kelas}}"><br>
+
+        <input type="submit" value="Save">
+    </form>
+</body>
+</html>
