@@ -46,10 +46,12 @@
 
     {% elif user.level == 'A' %}
         <a href="{% url 'bulk-insert' %}">BULK INSERT NOWWWW</a>
+        <a href="{% url 'create-user' %}">Create siswa</a>
 
         <h2>List Siswa</h2>
         {% for siswa in siswa %}
-            <a href="{% url 'edit-siswa' siswa.nisn %}">{{siswa}}</a><br>
+            <a href="{% url 'siswa' siswa.nisn %}">{{siswa}}</a>&nbsp;
+            <a href="{% url 'delete-user' siswa.nisn %}">Delete</a><br>
         {% endfor %}
     {% else %}
 

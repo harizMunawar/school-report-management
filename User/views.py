@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
-from django.views.generic import View, FormView, DetailView
+from django.urls import reverse_lazy
+from django.views.generic import View, FormView, DetailView, UpdateView, CreateView, DeleteView
 from django.contrib.auth.decorators import login_required
 from User.forms import RegistrationForm, GuruForm, SiswaForm
 
@@ -126,32 +127,31 @@ class Registration(View):
             }
             return render(request, 'user/registration/register.html', context)
 
-class EditSiswa(DetailView):    
+class CreateUser(CreateView):
+    model = User
+    template_name = 'user/siswa/detail-siswa.html'
+    fields = ['nomor_induk', 'password']
+    
+    def form_valid(self, form):
+        obj = form.save(commit=False)
+        obj.level = 'S'
+        obj.save()
+        return redirect(f'/siswa/{obj.nomor_induk}/?action=create')
+
+class DeleteUser(DeleteView):
+    model = User
+    template_name = 'user/dashboard/delete-user.html'
+    slug_field = 'nomor_induk'
+    slug_url_kwarg = 'nomor_induk'
+    success_url = '/'
+
+class EditSiswa(UpdateView):    
     model = Siswa
     template_name = 'user/siswa/detail-siswa.html'
+    fields = ['nama', 'gender', 'tanggal_lahir', 'kelas']
     slug_field = 'nisn'
-    slug_url_kwarg = 'nisn'
-
-    def post(self, request, nisn):
-        nama = request.POST['nama']
-        gender = request.POST['gender'][0]
-        nisn = request.POST['nisn']
-        tanggal_lahir = request.POST['tanggal_lahir']
-        kelas = Kelas.objects.get(nama=request.POST['kelas'])
-
-        Siswa.objects.update_or_create(
-            nisn=nisn,
-            defaults={
-                'nama': nama,
-                'gender': gender,
-                'nisn': nisn,
-                'tanggal_lahir': tanggal_lahir,
-                'kelas': kelas,
-                },
-        )
-        return redirect('dashboard')
-
-
+    slug_url_kwarg = 'nomor_induk'
+    success_url = '/'
 
 def bulk_insert(request):
     f = open(settings.BASE_DIR/'student.json')

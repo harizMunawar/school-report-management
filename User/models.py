@@ -67,7 +67,7 @@ GENDER_LIST = [
 class Guru(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='akun_guru', null=True, blank=True)
     nip = models.CharField(unique=True, max_length=18, editable=False)
-    nama = models.CharField(max_length=50, null=True, blank=True)
+    nama = models.CharField(max_length=50, null=True, blank=True, default='')
     tanggal_lahir = models.DateField(null=True, blank=True)
     gender = models.CharField(max_length=2, choices=GENDER_LIST, default=GENDER_LIST[0][0])
 
@@ -80,7 +80,7 @@ class Guru(models.Model):
 
 class Siswa(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='akun_siswa', null=True, blank=True)    
-    nama = models.CharField(max_length=50, null=True, blank=True)
+    nama = models.CharField(max_length=50, null=True, blank=True, default='')
     gender = models.CharField(max_length=2, choices=GENDER_LIST, default=GENDER_LIST[0][0], null=True)
     nisn = models.CharField(max_length=10, unique=True, editable=False,)
     tanggal_lahir = models.DateField(null=True, blank=True)
@@ -110,6 +110,18 @@ def create_user_profile(sender, instance, created, **kwargs):
         instance.is_admin = True
         instance.is_staff = True
         instance.is_superuser = True
-        instance.save()        
+        instance.save()
 
-        
+@receiver(post_save, sender=Siswa)
+def edit_siswa(sender, instance, created, **kwargs):
+    if not created:
+        akun_siswa = User.objects.get(nomor_induk=instance.nisn)
+        akun_siswa.username = f"S-{instance.nama.title().split(' ')[-1]}-{instance.nisn}"
+        akun_siswa.save()
+
+@receiver(post_save, sender=Guru)
+def edit_guru(sender, instance, created, **kwargs):
+    if not created:
+        akun_guru = User.objects.get(nomor_induk=instance.nip)
+        akun_guru.username = f"G-{instance.nama.title().split(' ')[-1]}-{instance.nip}"
+        akun_guru.save()
