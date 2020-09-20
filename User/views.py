@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
-from django.views.generic import View, FormView, DetailView, UpdateView, CreateView, DeleteView
+from django.views.generic import View, FormView, DetailView, UpdateView, CreateView, DeleteView, ListView
 from django.contrib.auth.decorators import login_required
 from User.forms import RegistrationForm, GuruForm, SiswaForm
 
@@ -129,14 +129,19 @@ class Registration(View):
 
 class CreateUser(CreateView):
     model = User
-    template_name = 'user/siswa/detail-siswa.html'
+    template_name = 'user/dashboard/create-user.html'
     fields = ['nomor_induk', 'password']
     
     def form_valid(self, form):
         obj = form.save(commit=False)
-        obj.level = 'S'
-        obj.save()
-        return redirect(f'/siswa/{obj.nomor_induk}/?action=create')
+        if self.kwargs['level'] == 'siswa':
+            obj.level = 'S'
+            obj.save()
+            return redirect(f'/siswa/{obj.nomor_induk}/')
+        elif self.kwargs['level'] == 'guru':
+            obj.level = 'G'
+            obj.save()
+            return redirect(f'/guru/{obj.nomor_induk}/')
 
 class DeleteUser(DeleteView):
     model = User
@@ -152,6 +157,24 @@ class EditSiswa(UpdateView):
     slug_field = 'nisn'
     slug_url_kwarg = 'nomor_induk'
     success_url = '/'
+
+class ListSiswa(ListView):
+    queryset = Siswa.objects.all().order_by('-kelas', 'nama')
+    paginate_by = 10
+    template_name = 'user/siswa/list-siswa.html'
+
+class EditGuru(UpdateView):    
+    model = Guru
+    template_name = 'user/guru/detail-guru.html'
+    fields = ['nama', 'gender', 'tanggal_lahir']
+    slug_field = 'nip'
+    slug_url_kwarg = 'nomor_induk'
+    success_url = '/'
+
+class ListGuru(ListView):
+    queryset = Guru.objects.all().order_by('-kelas', 'nama')
+    paginate_by = 10
+    template_name = 'user/guru/list-guru.html'
 
 def bulk_insert(request):
     f = open(settings.BASE_DIR/'student.json')

@@ -1,7 +1,6 @@
 {% extends 'base.html' %}
 
 {% block content %}
-
     Hello, {{ user.username|default:'Guest' }}! <br>
     Anda adalah seorang {{user.level}}
     INI DASHBOARD KELAS {{kelas}}
@@ -15,7 +14,7 @@
         {% for siswa, status in data %}
             <p>
                 <a href="{% url 'list_nilai' siswa.nisn %}">INSERT NILAI {{siswa.nama}}</a><br>
-                <a href="{% url 'edit-siswa' siswa.nisn %}">EDIT {{siswa.nama}}</a><br>
+                <a href="{% url 'siswa' siswa.nisn %}">EDIT {{siswa.nama}}</a><br>
                 {% if status == True %}
                     Sudah lengkap 
                     <a href="{% url 'export-pdf' siswa.nisn %}?action=download">Export PDF</a>
@@ -46,16 +45,10 @@
 
     {% elif user.level == 'A' %}
         <a href="{% url 'bulk-insert' %}">BULK INSERT NOWWWW</a>
-        <a href="{% url 'create-user' %}">Create siswa</a>
+        <a href="{% url 'create-user' 'siswa' %}">Create siswa</a>
+        <a href="{% url 'create-user' 'guru' %}">Create guru</a>
 
-        <h2>List Siswa</h2>
-        {% for siswa in siswa %}
-            <a href="{% url 'siswa' siswa.nisn %}">{{siswa}}</a>&nbsp;
-            <a href="{% url 'delete-user' siswa.nisn %}">Delete</a><br>
-        {% endfor %}
-    {% else %}
-
+        <a href="{% url 'list-siswa' %}"><h2>List Siswa</h2></a>  
+        <a href="{% url 'list-guru' %}"><h2>List Guru</h2></a>  
     {% endif %}
-    
-
 {% endblock content %}

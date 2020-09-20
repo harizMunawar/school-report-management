@@ -1,23 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Rapor PDF</title>
+{% extends "base.html" %}
 
-        <style>
-            @page{
-                size: "A4";
-                margin: 2cm;
-            }
-            
-        </style>
+{% block stylesheet %}
+    <style>
+        @page{
+            size: "A4";
+            margin: 2cm;
+        }    
+    </style>
+{% endblock stylesheet %}
 
-    </head>
-    <body>
-        <h2>Rapor {{siswa}}</h2>
-        {% for id, pelajaran, nilai in data %}
-            <p>{{pelajaran}}-{{nilai}}</p>
-        {% endfor %}
-    </body>
-</html>
+{% block content %}
+    <h2>Rapor {{siswa}}</h2>
+    {% for id, pelajaran, nilai in data %}
+        <p>{{pelajaran}}-{{nilai}}</p>
+    {% endfor %}
+{% endblock content %}
