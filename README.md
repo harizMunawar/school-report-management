@@ -69,18 +69,19 @@ You can use any virtual environment you want, but I prefer [virtualenv](https://
 __1. Setting Up Virtual Environment__<br>
 Open terminal in the root directory of this project
 ```
-pip install virtualenv env-report
+pip install virtualenv 
+virtualenv env
 ```
 
 __2. Activate Your Virtual Environment__<br>
 For Windows
 ```
-cd env-report/Scripts
+cd env/Scripts
 activate.bat
 ```
 For Linux
 ```
-cd env-report/bin
+cd env/bin
 activate
 ```
 
