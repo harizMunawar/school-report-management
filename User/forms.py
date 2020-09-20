@@ -6,8 +6,8 @@ from django.contrib.auth.forms import ReadOnlyPasswordHashField
 class DateInput(forms.DateInput):
     input_type = 'date'
 
-class RegistrationForm(UserCreationForm):
-    nomor_induk = forms.CharField(max_length=18, help_text='Tolong masukan NIP(guru)/NISN(siswa)')
+class RegistrationForm(UserCreationForm):    
+    nomor_induk = forms.CharField(max_length=18)
 
     class Meta:
         model = User

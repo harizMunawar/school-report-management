@@ -130,7 +130,7 @@ class Registration(View):
 class CreateUser(CreateView):
     model = User
     template_name = 'user/dashboard/create-user.html'
-    fields = ['nomor_induk', 'password']
+    form_class = RegistrationForm
     
     def form_valid(self, form):
         obj = form.save(commit=False)
@@ -153,7 +153,7 @@ class DeleteUser(DeleteView):
 class EditSiswa(UpdateView):    
     model = Siswa
     template_name = 'user/siswa/detail-siswa.html'
-    fields = ['nama', 'gender', 'tanggal_lahir', 'kelas']
+    form_class = SiswaForm
     slug_field = 'nisn'
     slug_url_kwarg = 'nomor_induk'
     success_url = '/'
@@ -166,7 +166,7 @@ class ListSiswa(ListView):
 class EditGuru(UpdateView):    
     model = Guru
     template_name = 'user/guru/detail-guru.html'
-    fields = ['nama', 'gender', 'tanggal_lahir']
+    form_class = GuruForm
     slug_field = 'nip'
     slug_url_kwarg = 'nomor_induk'
     success_url = '/'
