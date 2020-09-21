@@ -14,7 +14,7 @@
         {% for siswa, status in data %}
             <p>
                 <a href="{% url 'list_nilai' siswa.nisn %}">INSERT NILAI {{siswa.nama}}</a><br>
-                <a href="{% url 'siswa' siswa.nisn %}">EDIT {{siswa.nama}}</a><br>
+                <a href="{% url 'siswa' siswa.kelas siswa.nisn %}">EDIT {{siswa.nama}}</a><br>
                 {% if status == True %}
                     Sudah lengkap 
                     <a href="{% url 'export-pdf' siswa.nisn %}?action=download">Export PDF</a>
@@ -47,8 +47,10 @@
         <a href="{% url 'bulk-insert' %}">BULK INSERT NOWWWW</a>
         <a href="{% url 'create-user' 'siswa' %}">Create siswa</a>
         <a href="{% url 'create-user' 'guru' %}">Create guru</a>
+        <a href="{% url 'create-kelas' %}">Create kelas</a>
 
         <a href="{% url 'list-siswa' %}"><h2>List Siswa</h2></a>  
-        <a href="{% url 'list-guru' %}"><h2>List Guru</h2></a>  
+        <a href="{% url 'list-guru' %}"><h2>List Guru</h2></a>
+        <a href="{% url 'list-kelas' %}"><h2>List Kelas</h2></a>
     {% endif %}
 {% endblock content %}

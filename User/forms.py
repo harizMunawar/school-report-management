@@ -30,7 +30,6 @@ class UserChangeForm(forms.ModelForm):
     def clean_password(self):
         return self.initial["password"]
         
-
 class GuruForm(forms.ModelForm):
     class Meta:
         model = Guru        

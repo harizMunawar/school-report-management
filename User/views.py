@@ -10,6 +10,7 @@ from Nilai.models import MataPelajaran, NilaiMataPelajaran
 from Nilai.views import get_data, get_unzip
 
 from django.core.exceptions import ObjectDoesNotExist
+from django.utils.datastructures import MultiValueDictKeyError
 from django.http import Http404
 from collections import Counter
 from django.conf import settings
@@ -159,9 +160,18 @@ class EditSiswa(UpdateView):
     success_url = '/'
 
 class ListSiswa(ListView):
-    queryset = Siswa.objects.all().order_by('-kelas', 'nama')
     paginate_by = 10
     template_name = 'user/siswa/list-siswa.html'
+
+    def get_queryset(self):
+        try:
+            if not 'kelas' in self.request.GET or self.request.GET['kelas'] == '':
+                return Siswa.objects.all().order_by('-kelas', 'nama')
+            else:
+                kelas = Kelas.objects.get(nama=self.request.GET.get('kelas', ''))
+                return Siswa.objects.filter(kelas=kelas).order_by('-kelas', 'nama')
+        except ObjectDoesNotExist:
+            raise Http404
 
 class EditGuru(UpdateView):    
     model = Guru
