@@ -2,11 +2,7 @@
 
 {% block content %}
     {% for kelas in object_list %}
-        <a href="{% url 'edit-kelas' kelas.nama %}">{{kelas}}</a>&nbsp;<a href="{% url 'delete-kelas' kelas.nama %}">delete</a><br>
-        {% if kelas.walikelas %}
-        <a href="{% url 'guru' kelas.walikelas.nip %}">Walikelas: {{kelas.walikelas}}</a><br>  
-        {% endif %}        
-        <a href="{% url 'list-siswa' %}?kelas={{kelas}}">List Siswa</a><br><br><br>
+        <a href="{% url 'detail-kelas' kelas.nama %}">{{kelas}}</a><br>
     {% endfor %}
 
     {% include "components/pagination.html" %}

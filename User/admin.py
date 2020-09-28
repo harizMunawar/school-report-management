@@ -3,7 +3,6 @@ from User.models import User, Guru, Siswa
 from User.forms import UserCreationForm, UserChangeForm
 from django.contrib.auth.models import Group
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
-from django_reverse_admin import ReverseModelAdmin
 
 
 @admin.register(User)

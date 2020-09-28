@@ -28,7 +28,6 @@ INSTALLED_APPS = [
     'django.contrib.admindocs',
     
     'rest_framework',
-    'django_reverse_admin',
 
     'User',
     'Kelas',
