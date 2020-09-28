@@ -14,7 +14,7 @@
         {% for siswa, status in data %}
             <p>
                 <a href="{% url 'list_nilai' siswa.nisn %}">INSERT NILAI {{siswa.nama}}</a><br>
-                <a href="{% url 'siswa' siswa.kelas siswa.nisn %}">EDIT {{siswa.nama}}</a><br>
+                <a href="{% url 'edit-siswa' siswa.kelas siswa.nisn %}">EDIT {{siswa.nama}}</a><br>
                 {% if status == True %}
                     Sudah lengkap 
                     <a href="{% url 'export-pdf' siswa.nisn %}?action=download">Export PDF</a>

@@ -1,17 +1,24 @@
-from django.urls import path
+from django.urls import path, include
 from . import views
 
 urlpatterns = [
     path('', views.dashboard, name="dashboard"),
     path('register/<level>/', views.Registration.as_view(), name='registration'),
     path('create/<level>/', views.CreateUser.as_view(), name='create-user'),
-    path('delete/user/<nomor_induk>/', views.DeleteUser.as_view(), name='delete-user'),
-
-    path('siswa/', views.ListSiswa.as_view(), name='list-siswa'),
-    path('siswa/<nomor_induk>/', views.EditSiswa.as_view(), name='siswa'),
-
-    path('guru/', views.ListGuru.as_view(), name='list-guru'),
-    path('guru/<nomor_induk>/', views.EditGuru.as_view(), name='guru'),
-
+    path('delete/<nomor_induk>/', views.DeleteUser.as_view(), name='delete-user'),
+    path('user/', include([
+        path('siswa/', include([
+            path('', views.ListSiswa.as_view(), name='list-siswa'),
+            # path('<nomor_induk>/', views.DetailSiswa.as_view(), name='detail-siswa'),
+            path('<nomor_induk>/edit', views.EditSiswa.as_view(), name='edit-siswa'),
+            # path('<nomor_induk>/delete', views.DeleteSiswa.as_view(), name='delete-siswa'),
+        ])),
+        path('guru/', include([
+            path('', views.ListGuru.as_view(), name='list-guru'),        
+            path('<nomor_induk>/', views.DetailGuru.as_view(), name='detail-guru'),
+            path('<nomor_induk>/edit', views.EditGuru.as_view(), name='edit-guru'),
+            # path('<nomor_induk>/delete', views.DeleteGuru.as_view(), name='delete-guru'),
+        ])),  
+    ])),                  
     path('bulk-insert/', views.bulk_insert, name='bulk-insert'),
 ]

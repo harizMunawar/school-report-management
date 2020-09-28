@@ -7,7 +7,6 @@ from User.forms import RegistrationForm, GuruForm, SiswaForm
 from User.models import User, Siswa, Guru
 from Kelas.models import Jurusan, Kelas
 from Nilai.models import MataPelajaran, NilaiMataPelajaran
-from Nilai.views import get_data, get_unzip
 
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.datastructures import MultiValueDictKeyError
@@ -15,6 +14,7 @@ from django.http import Http404
 from collections import Counter
 from django.conf import settings
 from django.contrib.auth import hashers
+from Helpers import zip_pelnilai, get_finished_siswa, get_unfinished_siswa
 import json
 
 @login_required
@@ -29,7 +29,7 @@ def dashboard(request):
             status = []
             bundle_export = True
             for siswa in list_siswa:
-                id_, pelajaran, nilai = get_unzip(siswa, kelas)
+                id_, pelajaran, nilai = list(*zip(zip_pelnilai(siswa, kelas)))
                 if 0 in nilai:
                     status.append(False)
                 else:
@@ -173,9 +173,26 @@ class ListSiswa(ListView):
         except ObjectDoesNotExist:
             raise Http404
 
-class EditGuru(UpdateView):    
+class DetailGuru(DetailView):
     model = Guru
     template_name = 'user/guru/detail-guru.html'
+    slug_field = 'nip'
+    slug_url_kwarg = 'nomor_induk'
+    context_object_name = 'guru'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)        
+        context['kelas'] = Kelas.objects.get(walikelas=kwargs['object'])
+        context['list_siswa'] = Siswa.objects.filter(kelas=context['kelas'])
+        context['count_siswa'] = context['list_siswa'].count()
+        context['finished_siswa'] = get_finished_siswa(context['list_siswa'], context['kelas'])
+        context['unfinished_siswa'] = get_unfinished_siswa(context['list_siswa'], context['kelas'])
+        return context
+    
+
+class EditGuru(UpdateView):    
+    model = Guru
+    template_name = 'user/guru/edit-guru.html'
     form_class = GuruForm
     slug_field = 'nip'
     slug_url_kwarg = 'nomor_induk'

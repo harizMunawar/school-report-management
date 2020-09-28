@@ -2,7 +2,7 @@
 
 {% block content %}
     {% for guru in object_list %}
-        <a href="{% url 'guru' guru.nip %}">{{guru}}&nbsp;</a>
+        <a href="{% url 'detail-guru' guru.nip %}">{{guru}}&nbsp;</a>
         <a href="{% url 'list-siswa' %}?kelas={{guru.kelas}}">{{guru.kelas}}&nbsp;</a>
         <a href="{% url 'delete-user' guru.nip %}">Delete</a><br>
     {% empty %}

@@ -1,11 +1,31 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 
 {% block content %}
-    {{object.nama}}
+    <h1>{{guru.nama}}</h1>
+    <h2>Walikelas: <a href="{% url 'detail-kelas' kelas.nama %}">{{ kelas }}</a></h2>
 
-    <form method="post">
-        {% csrf_token %}         
-        {{ form.as_p }}
-        <input type="submit" value="Update">
-    </form>
-{% endblock content %}    
+    <p>Jumlah Siswa Yang Di Walikan: {{count_siswa}}</p>
+
+    <p>Siswa Yang Sudah Lengkap Nilainya: 
+        {% for siswa in finished_siswa %}
+            <h4>{{siswa.nama}}</h4>
+            <h5>
+                <a href="{% url 'list_nilai' siswa.nisn %}">INSERT NILAI</a>
+                <a href="{% url 'edit-siswa' siswa.nisn %}">EDIT</a>
+                <a href="{% url 'export-pdf' siswa.nisn %}?action=download">Export PDF</a>
+                <a href="{% url 'export-pdf' siswa.nisn %}?action=preview">Preview PDF</a> 
+            </h5>
+        {% endfor %}
+    </p>
+
+    <p>Siswa Yang Belum Lengkap Nilainya:
+        {% for siswa in unfinished_siswa %}
+            <h4>{{siswa.nama}}</h4>
+            <h5>
+                <a href="{% url 'list_nilai' siswa.nisn %}">INSERT NILAI</a>
+                <a href="{% url 'edit-siswa' siswa.nisn %}">EDIT</a>
+            </h5>
+        {% endfor %}
+    </p>
+
+{% endblock content %}

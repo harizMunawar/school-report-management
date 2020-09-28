@@ -5,37 +5,15 @@ from Kelas.models import Kelas
 from User.models import Siswa
 from django.contrib.auth.decorators import login_required
 from django.http import Http404
-
-def get_data(siswa, kelas):    
-    matapelajaran = MataPelajaran.objects.values('id', 'nama').filter(kelas=kelas)[::1]
-    list_id = []
-    list_pelajaran = []            
-    list_nilai = []
-
-    for pelajaran in matapelajaran:
-        list_pelajaran.append(pelajaran['nama'])
-        list_id.append(pelajaran['id'])
-        nil = NilaiMataPelajaran.objects.values('nilai').filter(pelajaran=pelajaran['id'], siswa=siswa)
-        if not nil:
-            list_nilai.append(0)
-        else:
-            for nil in nil:
-                list_nilai.append(nil['nilai'])
-
-    return zip(list_id, list_pelajaran, list_nilai)
-
-def get_unzip(siswa, kelas):
-    data = get_data(siswa, kelas)
-    res = list(zip(*data))
-    return res
+from Helpers import zip_pelnilai
 
 class ListNilai(View):        
     def get(self, request, nisn):        
         if request.user.is_authenticated and not request.user.level == 'S':
             try:
-                siswa = Siswa.objects.get(nisn=nisn)
-                kelas = Kelas.objects.get(walikelas=request.user.akun_guru)
-                data = get_data(siswa, kelas)                
+                siswa = Siswa.objects.get(nisn=nisn)          
+                kelas = Kelas.objects.get(nama=siswa.kelas)
+                data = zip_pelnilai(siswa, kelas)                
                 
                 context = {
                     'data': data,
@@ -51,8 +29,8 @@ class ListNilai(View):
         if request.user.is_authenticated and not request.user.level == 'S':            
             try:                
                 siswa = Siswa.objects.get(nisn=nisn)
-                kelas = Kelas.objects.get(walikelas=request.user.akun_guru)
-                data = get_data(siswa, kelas)
+                kelas = Kelas.objects.get(nama=siswa.kelas)
+                data = zip_pelnilai(siswa, kelas)
                 completed = True
                 for id_, pelajaran, nilai in data:
                     matapelajaran = MataPelajaran.objects.filter(id=id_)[0]

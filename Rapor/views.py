@@ -3,7 +3,7 @@ from django.http import HttpResponse, FileResponse
 from django.template.loader import render_to_string
 from django.conf import settings
 from weasyprint import HTML
-from Nilai.views import get_unzip, get_data
+from Helpers import zip_pelnilai
 from django.views.generic import View
 from User.models import Siswa
 from Kelas.models import Kelas
@@ -13,7 +13,7 @@ import shutil
 class ExportPDF(View):
     def get(self, request, nisn):        
         siswa = Siswa.objects.get(nisn=nisn)
-        data = get_data(siswa, siswa.kelas)
+        data = zip_pelnilai(siswa, siswa.kelas)
         pdf_dir = f'{settings.BASE_DIR}\media\pdf\{siswa.kelas}'
 
         if not os.path.isdir(pdf_dir): 
@@ -26,7 +26,7 @@ class ExportPDF(View):
         if request.GET['action'] == 'download':                
             with open(f'{pdf_dir}/{siswa.nama}.pdf', 'rb') as result:            
                 response = HttpResponse(result, content_type='application/pdf;')
-                response['Content-Disposition'] = f'inline; filename={siswa.nama}.pdf'
+                response['Content-Disposition'] = f'attachment; filename={siswa.nama}.pdf'
                 response['Content-Transfer-Encoding'] = 'binary'
                 return response
         elif request.GET['action'] == 'preview':
