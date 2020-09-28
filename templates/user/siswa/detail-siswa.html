@@ -1,11 +1,18 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 
 {% block content %}
-    {{object.nama}}
+    <h1>{{siswa.nama}}</h1>
+    <h2>
+        Kelas: <a href="{% url 'detail-kelas' kelas.nama %}">{{ kelas }}</a>
+        Walikelas: <a href="{% url 'detail-guru' kelas.walikelas.nip %}">{{ kelas.walikelas }}</a>
+    </h2> 
 
-    <form method="post">
-        {% csrf_token %}         
-        {{ form.as_p }}
-        <input type="submit" value="Update">
-    </form>
+    <p>Nilai: 
+        {% for id, pelajaran, nilai in data_nilai %}
+            <h5>
+                {{pelajaran}}: {{nilai}}
+            </h5>
+        {% endfor %}
+    </p>    
+
 {% endblock content %}

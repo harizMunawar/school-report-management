@@ -8,10 +8,9 @@
 
     <p>Siswa Yang Sudah Lengkap Nilainya: 
         {% for siswa in finished_siswa %}
-            <h4>{{siswa.nama}}</h4>
+            <h4><a href="{% url 'detail-siswa' siswa.nisn %}">{{siswa.nama}}</a></h4>
             <h5>
-                <a href="{% url 'list_nilai' siswa.nisn %}">INSERT NILAI</a>
-                <a href="{% url 'edit-siswa' siswa.nisn %}">EDIT</a>
+                <a href="{% url 'list_nilai' siswa.nisn %}">INSERT NILAI</a>                
                 <a href="{% url 'export-pdf' siswa.nisn %}?action=download">Export PDF</a>
                 <a href="{% url 'export-pdf' siswa.nisn %}?action=preview">Preview PDF</a> 
             </h5>
@@ -20,10 +19,9 @@
 
     <p>Siswa Yang Belum Lengkap Nilainya:
         {% for siswa in unfinished_siswa %}
-            <h4>{{siswa.nama}}</h4>
+            <h4><a href="{% url 'detail-siswa' siswa.nisn %}">{{siswa.nama}}</a></h4>
             <h5>
                 <a href="{% url 'list_nilai' siswa.nisn %}">INSERT NILAI</a>
-                <a href="{% url 'edit-siswa' siswa.nisn %}">EDIT</a>
             </h5>
         {% endfor %}
     </p>

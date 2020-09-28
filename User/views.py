@@ -151,9 +151,21 @@ class DeleteUser(DeleteView):
     slug_url_kwarg = 'nomor_induk'
     success_url = '/'
 
-class EditSiswa(UpdateView):    
+class DetailSiswa(DetailView):
     model = Siswa
     template_name = 'user/siswa/detail-siswa.html'
+    slug_field = 'nisn'
+    slug_url_kwarg = 'nomor_induk'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)        
+        context['kelas'] = Kelas.objects.get(nama=kwargs['object'].kelas)
+        context['data_nilai'] = zip_pelnilai(kwargs['object'], context['kelas'])
+        return context
+
+class EditSiswa(UpdateView):    
+    model = Siswa
+    template_name = 'user/siswa/edit-siswa.html'
     form_class = SiswaForm
     slug_field = 'nisn'
     slug_url_kwarg = 'nomor_induk'

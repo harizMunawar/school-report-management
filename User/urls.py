@@ -9,7 +9,7 @@ urlpatterns = [
     path('user/', include([
         path('siswa/', include([
             path('', views.ListSiswa.as_view(), name='list-siswa'),
-            # path('<nomor_induk>/', views.DetailSiswa.as_view(), name='detail-siswa'),
+            path('<nomor_induk>/', views.DetailSiswa.as_view(), name='detail-siswa'),
             path('<nomor_induk>/edit', views.EditSiswa.as_view(), name='edit-siswa'),
             # path('<nomor_induk>/delete', views.DeleteSiswa.as_view(), name='delete-siswa'),
         ])),
