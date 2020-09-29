@@ -32,7 +32,7 @@
   - [Prerequisites](#prerequisites)
   - [Installation](#installation)
   - [Admin Site](#admin-site)
-  - [Export HTML to PDF [^1]](#export-html-to-pdf-1)
+  - [Export HTML to PDF](#export-html-to-pdf)
 - [Our Team](#our-team)
 - [Contributing](#contributing)
 
@@ -118,8 +118,8 @@ Default port is 8000, so access the [server](127.0.0.1:8000) there
 To access the admin site visit the <text style="background-color: #A9A9A9; padding: 3px; border-radius: 4px; color: white">/admin</text> url<br>
 You will need your "Nomor Induk" & "Password" from [step 5](#installation) as a login authentication
 
-### Export HTML to PDF [^1]
-To properly use the export to PDF feature, we use [weasyprint](https://pypi.org/project/WeasyPrint/). As stated by weasyprint
+### Export HTML to PDF
+To properly use the export to PDF feature, we use [weasyprint](https://pypi.org/project/WeasyPrint/). As stated by weasyprint <sup><a name="weasyprintdocs">[1]</a></sup>
 
 >Besides a proper Python installation and a few Python packages, WeasyPrint needs the Pango, cairo and GDK-PixBuf libraries. They are required for the graphical stuff: Text and image rendering. These libraries aren’t Python packages. They are part of GTK+ (formerly known as GIMP Toolkit), and must be installed separately.
 
@@ -136,4 +136,5 @@ After you finish the installation you need to add to PATH the GTK3 runtime. Depe
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 
-[^1]:Keep in my mind that this step is only for Windows OS. For more information about this step please read the [official weasyprint documentation](https://weasyprint.readthedocs.io/en/stable/install.html)
+---
+[[1]](#weasyprintdocs): Keep in my mind that this step is only for Windows OS. For more information about this step please read the [official weasyprint documentation](https://weasyprint.readthedocs.io/en/stable/install.html)
