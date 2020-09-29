@@ -138,11 +138,11 @@ class CreateUser(CreateView):
         if self.kwargs['level'] == 'siswa':
             obj.level = 'S'
             obj.save()
-            return redirect(f'/siswa/{obj.nomor_induk}/')
+            return redirect(f'/user/siswa/{obj.nomor_induk}/edit')
         elif self.kwargs['level'] == 'guru':
             obj.level = 'G'
             obj.save()
-            return redirect(f'/guru/{obj.nomor_induk}/')
+            return redirect(f'/user/guru/{obj.nomor_induk}/edit')
 
 class DeleteUser(DeleteView):
     model = User
@@ -196,12 +196,15 @@ class DetailGuru(DetailView):
     context_object_name = 'guru'
 
     def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)        
-        context['kelas'] = Kelas.objects.get(walikelas=kwargs['object'])
-        context['list_siswa'] = Siswa.objects.filter(kelas=context['kelas'])
-        context['count_siswa'] = context['list_siswa'].count()
-        context['finished_siswa'] = get_finished_siswa(context['list_siswa'], context['kelas'])
-        context['unfinished_siswa'] = get_unfinished_siswa(context['list_siswa'], context['kelas'])
+        context = super().get_context_data(**kwargs)
+        try:   
+            context['kelas'] = Kelas.objects.get(walikelas=kwargs['object'])            
+            context['list_siswa'] = Siswa.objects.filter(kelas=context['kelas'])
+            context['count_siswa'] = context['list_siswa'].count()
+            context['finished_siswa'] = get_finished_siswa(context['list_siswa'], context['kelas'])
+            context['unfinished_siswa'] = get_unfinished_siswa(context['list_siswa'], context['kelas'])            
+        except ObjectDoesNotExist:
+            pass        
         return context
     
 

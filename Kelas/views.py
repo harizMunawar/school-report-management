@@ -20,7 +20,7 @@ class DetailKelas(DetailView):
 
 class CreateKelas(CreateView):
     model = Kelas
-    template_name = 'kelas/edit-kelas.html'
+    template_name = 'kelas/form-kelas.html'
     form_class = KelasForm
     success_url = '/'
 
@@ -31,7 +31,7 @@ class ListKelas(ListView):
 
 class EditKelas(UpdateView):
     model = Kelas
-    template_name = 'kelas/edit-kelas.html'
+    template_name = 'kelas/form-kelas.html'
     form_class = KelasForm
     slug_field = 'nama'
     slug_url_kwarg = 'nama'
