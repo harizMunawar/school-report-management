@@ -158,9 +158,12 @@ class DetailSiswa(DetailView):
     slug_url_kwarg = 'nomor_induk'
 
     def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)        
-        context['kelas'] = Kelas.objects.get(nama=kwargs['object'].kelas)
-        context['data_nilai'] = zip_pelnilai(kwargs['object'], context['kelas'])
+        context = super().get_context_data(**kwargs)
+        try:            
+            context['data_nilai'] = zip_pelnilai(kwargs['object'], kwargs['object'].kelas)
+        except ObjectDoesNotExist:
+            pass
+        
         return context
 
 class EditSiswa(UpdateView):    

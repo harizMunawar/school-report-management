@@ -25,10 +25,6 @@
             </p><br>          
         {% endfor %}
 
-        {% if bundle_export == True %}
-            <a href="{% url 'bundle-export' %}">Download Bundle PDF</a>
-        {% endif %}
-
     {% elif user.level == 'S' %}
         {% if kelas %}
             <h2>Walikelas anda</h2>

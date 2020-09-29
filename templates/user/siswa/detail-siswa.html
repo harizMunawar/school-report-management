@@ -2,10 +2,16 @@
 
 {% block content %}
     <h1>{{siswa.nama}}</h1>
-    <h2>
-        Kelas: <a href="{% url 'detail-kelas' kelas.nama %}">{{ kelas }}</a>
-        Walikelas: <a href="{% url 'detail-guru' kelas.walikelas.nip %}">{{ kelas.walikelas }}</a>
-    </h2> 
+    <small>
+        <a href="{% url 'edit-siswa' siswa.nisn %}">Edit</a>
+        <a href="{% url 'delete-user' siswa.nisn %}">Delete</a>
+    </small>
+    {% if siswa.kelas %}
+        <h2>
+            Kelas: <a href="{% url 'detail-kelas' siswa.kelas.nama %}">{{ siswa.kelas }}</a>
+            Walikelas: <a href="{% url 'detail-guru' siswa.kelas.walikelas.nip %}">{{ siswa.kelas.walikelas }}</a>
+        </h2> 
+    {% endif %}
 
     <p>Nilai: 
         {% for id, pelajaran, nilai in data_nilai %}

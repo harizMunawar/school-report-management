@@ -2,7 +2,7 @@
 
 {% block content %}
     {% for siswa in object_list %}
-        <a href="{% url 'siswa' siswa.nisn %}">{{siswa}}&nbsp;</a>
+        <a href="{% url 'detail-siswa' siswa.nisn %}">{{siswa}}&nbsp;</a>
         {% if not siswa.kelas == None %}
             <a href="{% url 'detail-kelas' siswa.kelas.nama %}">{{siswa.kelas}}</a>&nbsp;        
         {% endif %}

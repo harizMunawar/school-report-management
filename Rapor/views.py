@@ -23,21 +23,23 @@ class ExportPDF(View):
         html = HTML(string=html_string)
         result = html.write_pdf(target=f'{pdf_dir}/{siswa.nama}.pdf')
 
-        if request.GET['action'] == 'download':                
-            with open(f'{pdf_dir}/{siswa.nama}.pdf', 'rb') as result:            
-                response = HttpResponse(result, content_type='application/pdf;')
+        with open(f'{pdf_dir}/{siswa.nama}.pdf', 'rb') as result:            
+            response = HttpResponse(result, content_type='application/pdf;')
+            if request.GET['action'] == 'download':
                 response['Content-Disposition'] = f'attachment; filename={siswa.nama}.pdf'
                 response['Content-Transfer-Encoding'] = 'binary'
-                return response
-        elif request.GET['action'] == 'preview':
-            context = {'path': f'{settings.MEDIA_URL}pdf/{siswa.kelas}/{siswa.nama}.pdf'}
-            return render(request, 'rapor/preview.html', context)
-        else:
-            return redirect('dashboard')
+            elif request.GET['action'] == 'preview':
+                response['Content-Disposition'] = f'inline; filename={siswa.nama}.pdf'
+                response['Content-Transfer-Encoding'] = 'binary'
+                # context = {'path': f'{settings.MEDIA_URL}pdf/{siswa.kelas}/{siswa.nama}.pdf'}
+                # return render(request, 'rapor/preview.html', context)
+            else:
+                return redirect('dashboard')
+            return response
 
 class BundleExport(View):
-    def get(self, request):
-        kelas = Kelas.objects.get(nama=self.request.user.akun_guru.kelas)
+    def get(self, request, kelas):
+        kelas = Kelas.objects.get(nama=kelas)
         pdf_dir = f'{settings.BASE_DIR}/media/pdf/{kelas}'
         bundle_dir = f'{settings.BASE_DIR}/media/bundle'
         zip_file = shutil.make_archive(f'{bundle_dir}/Rapor-{kelas}', 'zip', pdf_dir)
