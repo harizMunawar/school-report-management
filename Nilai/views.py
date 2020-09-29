@@ -19,7 +19,7 @@ class ListNilai(View):
                     'data': data,
                 }
                 
-                return render(request, 'nilai/form_nilai.html', context)
+                return render(request, 'nilai/form-nilai.html', context)
             except Siswa.DoesNotExist:
                 raise Http404      
         else:
