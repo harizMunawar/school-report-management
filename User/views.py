@@ -201,10 +201,10 @@ class DetailGuru(DetailView):
             context['kelas'] = Kelas.objects.get(walikelas=kwargs['object'])            
             context['list_siswa'] = Siswa.objects.filter(kelas=context['kelas'])
             context['count_siswa'] = context['list_siswa'].count()
-            context['finished_siswa'] = get_finished_siswa(context['list_siswa'], context['kelas'])
-            context['unfinished_siswa'] = get_unfinished_siswa(context['list_siswa'], context['kelas'])            
+            context['finished_siswa'] = get_finished_siswa(context['list_siswa'])
+            context['unfinished_siswa'] = get_unfinished_siswa(context['list_siswa'])            
         except ObjectDoesNotExist:
-            pass        
+            pass
         return context
     
 
