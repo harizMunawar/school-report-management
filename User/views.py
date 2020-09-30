@@ -160,7 +160,7 @@ class DetailSiswa(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         try:            
-            context['data_nilai'] = zip_pelnilai(kwargs['object'], kwargs['object'].kelas)
+            context['data_nilai'] = zip_pelnilai(kwargs['object'])
         except ObjectDoesNotExist:
             pass
         

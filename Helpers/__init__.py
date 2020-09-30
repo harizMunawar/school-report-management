@@ -1,8 +1,7 @@
 from Nilai.models import MataPelajaran, NilaiMataPelajaran
 
-def zip_pelnilai(siswa, kelas):    
-    get_nilai(siswa, kelas)
-    matapelajaran = MataPelajaran.objects.values('id', 'nama').filter(kelas=kelas)[::1]
+def zip_pelnilai(siswa):        
+    matapelajaran = MataPelajaran.objects.values('id', 'nama').filter(kelas=siswa.kelas)[::1]
     list_id = []
     list_pelajaran = []            
     list_nilai = []
@@ -19,8 +18,8 @@ def zip_pelnilai(siswa, kelas):
 
     return zip(list_id, list_pelajaran, list_nilai)
 
-def get_nilai(siswa, kelas):
-    matapelajaran = MataPelajaran.objects.values('id').filter(kelas=kelas)[::1]
+def get_nilai(siswa):
+    matapelajaran = MataPelajaran.objects.values('id').filter(kelas=siswa.kelas)[::1]
     list_nilai = []
     
     for pelajaran in matapelajaran:
@@ -32,11 +31,11 @@ def get_nilai(siswa, kelas):
                 list_nilai.append(nil['nilai'])
     return list_nilai    
 
-def zip_siswa_status(list_siswa, kelas):    
-    return [(siswa, False) if 0 in get_nilai(siswa, siswa.kelas) else (siswa, True) for siswa in list_siswa]    
+def zip_siswa_status(list_siswa):    
+    return [(siswa, False) if 0 in get_nilai(siswa) else (siswa, True) for siswa in list_siswa]    
 
 def get_finished_siswa(list_siswa):
-    return [siswa for siswa in list_siswa if not 0 in get_nilai(siswa, siswa.kelas)]
+    return [siswa for siswa in list_siswa if not 0 in get_nilai(siswa)]
 
 def get_unfinished_siswa(list_siswa):
-    return [siswa for siswa in list_siswa if 0 in get_nilai(siswa, siswa.kelas)]
+    return [siswa for siswa in list_siswa if 0 in get_nilai(siswa)]
