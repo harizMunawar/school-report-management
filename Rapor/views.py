@@ -19,9 +19,10 @@ class ExportPDF(View):
         if not os.path.isdir(pdf_dir): 
             os.makedirs(pdf_dir)
 
-        html_string = render_to_string('rapor/pdf-output.html', {'data': data, 'siswa':siswa})
-        html = HTML(string=html_string)
-        result = html.write_pdf(target=f'{pdf_dir}/{siswa.nama}.pdf')
+        if not os.path.isfile(f'{pdf_dir}/{siswa.nama}.pdf'):
+            html_string = render_to_string('rapor/pdf-output.html', {'data': data, 'siswa':siswa})
+            html = HTML(string=html_string)
+            result = html.write_pdf(target=f'{pdf_dir}/{siswa.nama}.pdf')
 
         with open(f'{pdf_dir}/{siswa.nama}.pdf', 'rb') as result:            
             response = HttpResponse(result, content_type='application/pdf;')
@@ -31,8 +32,6 @@ class ExportPDF(View):
             elif request.GET['action'] == 'preview':
                 response['Content-Disposition'] = f'inline; filename={siswa.nama}.pdf'
                 response['Content-Transfer-Encoding'] = 'binary'
-                # context = {'path': f'{settings.MEDIA_URL}pdf/{siswa.kelas}/{siswa.nama}.pdf'}
-                # return render(request, 'rapor/preview.html', context)
             else:
                 return redirect('dashboard')
             return response
@@ -42,7 +41,15 @@ class BundleExport(View):
         kelas = Kelas.objects.get(nama=kelas)
         pdf_dir = f'{settings.BASE_DIR}/media/pdf/{kelas}'
         bundle_dir = f'{settings.BASE_DIR}/media/bundle'
-        zip_file = shutil.make_archive(f'{bundle_dir}/Rapor-{kelas}', 'zip', pdf_dir)
+
+        if not os.path.isdir(pdf_dir): 
+            os.makedirs(pdf_dir)
+
+        if not os.path.isdir(bundle_dir): 
+            os.makedirs(bundle_dir)
+
+        if not os.path.isfile(f'{bundle_dir}/Rapor-{kelas}.zip'):
+            zip_file = shutil.make_archive(f'{bundle_dir}/Rapor-{kelas}', 'zip', pdf_dir)
         
         zip_file = open(f'{bundle_dir}/Rapor-{kelas}.zip', 'rb')
         response = FileResponse(zip_file, content_type='application/force-download')
