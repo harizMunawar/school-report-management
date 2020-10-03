@@ -13,7 +13,7 @@ class ListNilai(View):
             try:
                 siswa = Siswa.objects.get(nisn=nisn)          
                 kelas = Kelas.objects.get(nama=siswa.kelas)
-                data = zip_pelnilai(siswa, kelas)                
+                data = zip_pelnilai(siswa)                
                 
                 context = {
                     'data': data,
@@ -30,7 +30,7 @@ class ListNilai(View):
             try:                
                 siswa = Siswa.objects.get(nisn=nisn)
                 kelas = Kelas.objects.get(nama=siswa.kelas)
-                data = zip_pelnilai(siswa, kelas)
+                data = zip_pelnilai(siswa)
                 completed = True
                 for id_, pelajaran, nilai in data:
                     matapelajaran = MataPelajaran.objects.filter(id=id_)[0]

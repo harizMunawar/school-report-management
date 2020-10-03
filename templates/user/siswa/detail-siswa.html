@@ -11,14 +11,12 @@
             Kelas: <a href="{% url 'detail-kelas' siswa.kelas.nama %}">{{ siswa.kelas }}</a>
             Walikelas: <a href="{% url 'detail-guru' siswa.kelas.walikelas.nip %}">{{ siswa.kelas.walikelas }}</a>
         </h2> 
-    {% endif %}
-
-    <p>Nilai: 
+        
+        <p>Nilai:</p>
         {% for id, pelajaran, nilai in data_nilai %}
             <h5>
                 {{pelajaran}}: {{nilai}}
             </h5>
-        {% endfor %}
-    </p>    
-
+        {% endfor %}        
+    {% endif %}        
 {% endblock content %}

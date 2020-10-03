@@ -13,7 +13,7 @@ import shutil
 class ExportPDF(View):
     def get(self, request, nisn):        
         siswa = Siswa.objects.get(nisn=nisn)
-        data = zip_pelnilai(siswa, siswa.kelas)
+        data = zip_pelnilai(siswa)
         pdf_dir = f'{settings.BASE_DIR}\media\pdf\{siswa.kelas}'
 
         if not os.path.isdir(pdf_dir): 

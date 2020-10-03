@@ -29,7 +29,7 @@ def dashboard(request):
             status = []
             bundle_export = True
             for siswa in list_siswa:
-                id_, pelajaran, nilai = list(*zip(zip_pelnilai(siswa, kelas)))
+                id_, pelajaran, nilai = list(*zip(zip_pelnilai(siswa)))
                 if 0 in nilai:
                     status.append(False)
                 else:
