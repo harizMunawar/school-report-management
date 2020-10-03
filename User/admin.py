@@ -1,14 +1,14 @@
 from django.contrib import admin
 from User.models import User, Guru, Siswa
-from User.forms import UserCreationForm, UserChangeForm
+from User.forms import RegistrationForm, EditUserForm
 from django.contrib.auth.models import Group
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 
 
 @admin.register(User)
 class UserAdmin(BaseUserAdmin):
-    form = UserChangeForm
-    add_form = UserCreationForm
+    form = EditUserForm
+    add_form = RegistrationForm
     
     list_display = ('username', 'nomor_induk', 'level')
     list_filter = ('level',)

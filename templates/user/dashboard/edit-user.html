@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <form method="post">
+        {% csrf_token %}
+        {{ form.username.errors }}
+        Username: {{ form.username }}<br>
+
+        {{ form.password.errors }}
+        Password: {{ form.password }}        
+
+        <input type="submit" value="Update">        
+    </form>
+{% endblock content %}

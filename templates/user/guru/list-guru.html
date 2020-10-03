@@ -3,8 +3,9 @@
 {% block content %}
     {% for guru in object_list %}
         <a href="{% url 'detail-guru' guru.nip %}">{{guru}}&nbsp;</a>
-        <a href="{% url 'list-siswa' %}?kelas={{guru.kelas}}">{{guru.kelas}}&nbsp;</a>
-        <a href="{% url 'delete-user' guru.nip %}">Delete</a><br>
+        {% if guru.kelas %}
+            <a href="{% url 'list-siswa' %}?kelas={{guru.kelas}}">{{guru.kelas}}&nbsp;</a>
+        {% endif %}<br>
     {% empty %}
         <h2>No Guru Yet</h2>
     {% endfor %}

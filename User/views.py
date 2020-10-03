@@ -1,8 +1,8 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, reverse
 from django.urls import reverse_lazy
 from django.views.generic import View, FormView, DetailView, UpdateView, CreateView, DeleteView, ListView
 from django.contrib.auth.decorators import login_required
-from User.forms import RegistrationForm, GuruForm, SiswaForm
+from User.forms import RegistrationForm, GuruForm, SiswaForm, EditUserForm
 
 from User.models import User, Siswa, Guru
 from Kelas.models import Jurusan, Kelas
@@ -19,57 +19,15 @@ import json
 
 @login_required
 def dashboard(request):
-    context = {}
     active_user = User.objects.get(nomor_induk = request.user.nomor_induk)
     if active_user.level == 'G':  
-        try:      
-            guru = Guru.objects.get(user=active_user)
-            kelas = Kelas.objects.get(walikelas=guru.id)
-            list_siswa = Siswa.objects.filter(kelas=kelas.id).order_by('nama')
-            status = []
-            bundle_export = True
-            for siswa in list_siswa:
-                id_, pelajaran, nilai = list(*zip(zip_pelnilai(siswa)))
-                if 0 in nilai:
-                    status.append(False)
-                else:
-                    status.append(True)
-
-            if False in status:
-                bundle_export = False              
-                   
-        except ObjectDoesNotExist:
-            kelas = None
-            list_siswa = None
-
-        context = {
-            'siswa': list_siswa,
-            'kelas': kelas,
-            'data': zip(list_siswa, status),
-            'bundle_export': bundle_export,
-        }
+        return redirect(reverse('detail-guru', args=[active_user.nomor_induk]))
 
     if active_user.level == 'S':
-        try:
-            siswa = Siswa.objects.get(user=active_user)
-            kelas = Kelas.objects.get(nama=siswa.kelas)
-            matapelajaran = MataPelajaran.objects.values('id', 'nama').filter(kelas=kelas)[::1]                        
-            data = get_data(siswa, kelas)
-        except ObjectDoesNotExist:
-            kelas = None
-            data = None            
-        context = {
-                'kelas': kelas,
-                'data' : data,
-        }
+        return redirect(reverse('detail-siswa', args=[active_user.nomor_induk]))
 
-    if active_user.level == 'A':        
-        siswa = Siswa.objects.all()                    
-        context = {
-                'siswa': siswa,                
-        }
-
-    return render(request, 'user/dashboard/dashboard.html', context)
+    if active_user.level == 'A':
+        return render(request, 'user/dashboard/dashboard.html', context)
 
 class Registration(View):
     def get(self, request, level=''):
@@ -143,7 +101,13 @@ class CreateUser(CreateView):
             obj.level = 'G'
             obj.save()
             return redirect(f'/user/guru/{obj.nomor_induk}/edit')
-
+class EditUser(UpdateView):
+    model = User
+    template_name = 'user/dashboard/edit-user.html'
+    form_class = EditUserForm
+    slug_field = 'nomor_induk'
+    slug_url_kwarg = 'nomor_induk'
+    success_url = '/'
 class DeleteUser(DeleteView):
     model = User
     template_name = 'user/dashboard/delete-user.html'
@@ -207,7 +171,6 @@ class DetailGuru(DetailView):
             pass
         return context
     
-
 class EditGuru(UpdateView):    
     model = Guru
     template_name = 'user/guru/edit-guru.html'

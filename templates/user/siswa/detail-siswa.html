@@ -2,10 +2,14 @@
 
 {% block content %}
     <h1>{{siswa.nama}}</h1>
-    <small>
-        <a href="{% url 'edit-siswa' siswa.nisn %}">Edit</a>
-        <a href="{% url 'delete-user' siswa.nisn %}">Delete</a>
-    </small>
+    {% if user.nomor_induk == siswa.nisn or user.level == 'A' %}
+        <small>
+            <a href="{% url 'edit-siswa' siswa.nisn %}">Edit</a>
+            <a href="{% url 'delete-user' siswa.nisn %}">Delete</a>
+            <a href="{% url 'edit-user' siswa.nisn %}">Edit Akun</a>
+        </small>
+    {% endif %}
+
     {% if siswa.kelas %}
         <h2>
             Kelas: <a href="{% url 'detail-kelas' siswa.kelas.nama %}">{{ siswa.kelas }}</a>
@@ -17,6 +21,6 @@
             <h5>
                 {{pelajaran}}: {{nilai}}
             </h5>
-        {% endfor %}        
+        {% endfor %}      
     {% endif %}        
 {% endblock content %}

@@ -20,7 +20,7 @@ class RegistrationForm(UserCreationForm):
             user.save()
         return user
         
-class UserChangeForm(forms.ModelForm):
+class EditUserForm(forms.ModelForm):
     password = ReadOnlyPasswordHashField()
 
     class Meta:
