@@ -27,7 +27,7 @@ def dashboard(request):
         return redirect(reverse('detail-siswa', args=[active_user.nomor_induk]))
 
     if active_user.level == 'A':
-        return render(request, 'user/dashboard/dashboard.html', context)
+        return render(request, 'user/dashboard/dashboard.html')
 
 class Registration(View):
     def get(self, request, level=''):

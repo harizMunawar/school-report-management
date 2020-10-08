@@ -2,13 +2,11 @@ from Nilai.models import MataPelajaran, NilaiMataPelajaran
 
 def zip_pelnilai(siswa):        
     matapelajaran = MataPelajaran.objects.values('id', 'nama').filter(kelas=siswa.kelas)[::1]
-    list_id = []
-    list_pelajaran = []            
+    list_id = [pelajaran['id'] for pelajaran in matapelajaran]
+    list_pelajaran = [pelajaran['nama'] for pelajaran in matapelajaran]            
     list_nilai = []
 
     for pelajaran in matapelajaran:
-        list_pelajaran.append(pelajaran['nama'])
-        list_id.append(pelajaran['id'])
         nil = NilaiMataPelajaran.objects.values('nilai').filter(pelajaran=pelajaran['id'], siswa=siswa)
         if not nil:
             list_nilai.append(0)
