@@ -8,7 +8,7 @@ urlpatterns = [
         path('register/<level>/', views.Registration.as_view(), name='registration'),
         path('create/<level>/', views.CreateUser.as_view(), name='create-user'),
         path('edit/<nomor_induk>/', views.EditUser.as_view(), name='edit-user'),             
-        path('edit/password/<nomor_induk>/', auth_views.PasswordChangeView.as_view(), name='edit-password'),
+        path('edit/password/<nomor_induk>/', views.EditPassword.as_view(), name='edit-password'),
         path('delete/<nomor_induk>/', views.DeleteUser.as_view(), name='delete-user'),
         path('siswa/', include([
             path('', views.ListSiswa.as_view(), name='list-siswa'),

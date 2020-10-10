@@ -7,8 +7,10 @@
         Username: {{ form.username }}<br>
 
         {{ form.password.errors }}
-        Password: {{ form.password }}        
-
+        Password: {{ form.password }}
+        {% if request.user.nomor_induk == view.kwargs.nomor_induk %}
+            <a href="{% url 'edit-password' view.kwargs.nomor_induk %}">Edit Password</a><br>
+        {% endif %}
         <input type="submit" value="Update">        
     </form>
 {% endblock content %}

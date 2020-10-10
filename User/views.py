@@ -3,6 +3,7 @@ from django.urls import reverse_lazy
 from django.views.generic import View, FormView, DetailView, UpdateView, CreateView, DeleteView, ListView
 from django.contrib.auth.decorators import login_required
 from User.forms import RegistrationForm, GuruForm, SiswaForm, EditUserForm
+from django.contrib.auth.views import PasswordChangeView
 
 from User.models import User, Siswa, Guru
 from Kelas.models import Jurusan, Kelas
@@ -101,6 +102,7 @@ class CreateUser(CreateView):
             obj.level = 'G'
             obj.save()
             return redirect(f'/user/guru/{obj.nomor_induk}/edit')
+            
 class EditUser(UpdateView):
     model = User
     template_name = 'user/dashboard/edit-user.html'
@@ -108,6 +110,11 @@ class EditUser(UpdateView):
     slug_field = 'nomor_induk'
     slug_url_kwarg = 'nomor_induk'
     success_url = '/'
+
+class EditPassword(PasswordChangeView):
+    template_name = 'user/dashboard/edit-password.html'
+    success_url = '/'
+
 class DeleteUser(DeleteView):
     model = User
     template_name = 'user/dashboard/delete-user.html'
