@@ -119,7 +119,7 @@ To access the admin site visit the <text style="background-color: #A9A9A9; paddi
 You will need your "Nomor Induk" & "Password" from [step 5](#installation) as a login authentication
 
 ### Export HTML to PDF
-To properly use the export to PDF feature, we use [weasyprint](https://pypi.org/project/WeasyPrint/). As stated by weasyprint <sup><a name="weasyprintdocs">[1]</a></sup>
+To properly use the export to PDF feature, we use [weasyprint](https://pypi.org/project/WeasyPrint/). As stated by weasyprint <sup>[[1]](#weasyprintdocs)</sup>
 
 >Besides a proper Python installation and a few Python packages, WeasyPrint needs the Pango, cairo and GDK-PixBuf libraries. They are required for the graphical stuff: Text and image rendering. These libraries aren’t Python packages. They are part of GTK+ (formerly known as GIMP Toolkit), and must be installed separately.
 
@@ -137,4 +137,4 @@ After you finish the installation you need to add to PATH the GTK3 runtime. Depe
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 
 ---
-[[1]](#weasyprintdocs): Keep in my mind that this step is only for Windows OS. For more information about this step please read the [official weasyprint documentation](https://weasyprint.readthedocs.io/en/stable/install.html)
+<a name="weasyprintdocs">[1]</a>: Keep in my mind that this step is only for Windows OS. For more information about this step please read the [official weasyprint documentation](https://weasyprint.readthedocs.io/en/stable/install.html)
