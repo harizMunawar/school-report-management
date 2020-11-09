@@ -30,7 +30,7 @@ class Kelas(models.Model):
     walikelas = models.OneToOneField("User.Guru", on_delete=models.SET_NULL, null=True, blank=True, related_name='kelas')
 
     def save(self, *args, **kwargs):
-        self.nama = f'{self.tingkat} {self.jurusan} {self.kelas}'
+        self.nama = f'{self.tingkat}-{self.jurusan}-{self.kelas}'
         super(Kelas, self).save(*args, **kwargs)
 
     def __str__(self):
