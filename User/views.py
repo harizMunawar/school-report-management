@@ -17,6 +17,7 @@ from django.conf import settings
 from django.contrib.auth import hashers
 from Helpers import zip_pelnilai, get_finished_siswa, get_unfinished_siswa
 import json
+from django.db.models import Q
 
 @login_required
 def dashboard(request):
@@ -150,11 +151,31 @@ class ListSiswa(ListView):
     template_name = 'user/siswa/list-siswa.html'
 
     def get_queryset(self):
+        search = False
         try:
-            if not 'kelas' in self.request.GET or self.request.GET['kelas'] == '':
+            if 'search' in self.request.GET and self.request.GET['search'] != '':
+                return Siswa.objects.filter(
+                    Q(nama__icontains=self.request.GET['search']) | 
+                    Q(nisn__istartswith=self.request.GET['search']))
+            else:            
                 return Siswa.objects.all().order_by('-kelas', 'nama')
+        except ObjectDoesNotExist:
+            raise Http404
+
+class ListSiswa_Kelas(ListView):
+    paginate_by = 10
+    template_name = 'user/siswa/list-siswa.html'
+
+    def get_queryset(self):
+        search = False
+        try:
+            kelas = Kelas.objects.get(nama=self.kwargs['kelas'])
+            if 'search' in self.request.GET and self.request.GET['search'] != '':
+                return Siswa.objects.filter(
+                    Q(nama__icontains=self.request.GET['search']) | 
+                    Q(nisn__istartswith=self.request.GET['search']),
+                    Q(kelas=kelas))
             else:
-                kelas = Kelas.objects.get(nama=self.request.GET.get('kelas', ''))
                 return Siswa.objects.filter(kelas=kelas).order_by('-kelas', 'nama')
         except ObjectDoesNotExist:
             raise Http404

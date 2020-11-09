@@ -12,6 +12,7 @@ urlpatterns = [
         path('delete/<nomor_induk>/', views.DeleteUser.as_view(), name='delete-user'),
         path('siswa/', include([
             path('', views.ListSiswa.as_view(), name='list-siswa'),
+            path('kelas/<kelas>', views.ListSiswa_Kelas.as_view(), name='list-siswa-kelas'),
             path('<nomor_induk>/', views.DetailSiswa.as_view(), name='detail-siswa'),
             path('<nomor_induk>/edit', views.EditSiswa.as_view(), name='edit-siswa'),
             # path('<nomor_induk>/delete', views.DeleteSiswa.as_view(), name='delete-siswa'),

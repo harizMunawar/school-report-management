@@ -1,14 +1,19 @@
 {% extends "base.html" %}
 
 {% block content %}
-    {% for siswa in object_list %}
-        <a href="{% url 'detail-siswa' siswa.nisn %}">{{siswa}}&nbsp;</a>
-        {% if not siswa.kelas == None %}
-            <a href="{% url 'detail-kelas' siswa.kelas.nama %}">{{siswa.kelas}}</a>&nbsp;        
-        {% endif %}<br>
-    {% empty %}
-        <h2>No Siswa Yet</h2>
-    {% endfor %}    
+    <form method="get">
+        <input type="text" id="search" name="search" placeholder="Search Name or NISN">
+    </form>
+    <div id="list">
+        {% for siswa in object_list %}
+            <a href="{% url 'detail-siswa' siswa.nisn %}">{{siswa}}&nbsp;</a>
+            {% if not siswa.kelas == None %}
+                <a href="{% url 'detail-kelas' siswa.kelas.nama %}">{{siswa.kelas}}</a>&nbsp;        
+            {% endif %}<br>
+        {% empty %}
+            <h2>No Siswa Yet</h2>
+        {% endfor %}    
 
-    {% include "components/pagination.html" with extra_param='kelas' extra_value=request.GET.kelas %}
+        {% include "components/pagination.html" with extra_param='search' extra_value=request.GET.search %}
+    </div>
 {% endblock content %}
