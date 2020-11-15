@@ -4,6 +4,7 @@ from django.dispatch import receiver
 from django.db.models.signals import post_save
 import Kelas.models
 from datetime import datetime
+import Helpers.choices as choice
 
 class UserManager(BaseUserManager):
     def create_user(self, nomor_induk, level, username, password=None):
@@ -27,15 +28,9 @@ class UserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-class User(AbstractBaseUser):
-    USER_ROLE = [
-        ('A','Admin'),
-        ('G','Guru'),
-        ('S','Siswa')
-    ]
-
+class User(AbstractBaseUser):    
     nomor_induk = models.CharField(verbose_name="Nomor Induk", unique=True, max_length=18)
-    level = models.CharField(choices=USER_ROLE, max_length=1)
+    level = models.CharField(choices=choice.USER_ROLE, max_length=1)
     username = models.CharField(max_length=10)
     date_joined = models.DateTimeField(verbose_name='date joined', auto_now_add=True)
     last_login = models.DateTimeField(verbose_name='last login', auto_now=True)
@@ -59,17 +54,12 @@ class User(AbstractBaseUser):
         return True
 
 
-GENDER_LIST = [
-    ('P', 'Pria'),
-    ('W', 'Wanita'),
-]
-
 class Guru(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='akun_guru', null=True, blank=True)
     nip = models.CharField(unique=True, max_length=18, editable=False)
     nama = models.CharField(max_length=50, null=True, blank=True, default='')
     tanggal_lahir = models.DateField(null=True, blank=True)
-    gender = models.CharField(max_length=2, choices=GENDER_LIST, default=GENDER_LIST[0][0])
+    gender = models.CharField(max_length=2, choices=choice.GENDER_LIST, default=choice.GENDER_LIST[0][0])
 
     def save(self, *args, **kwargs):
         self.nip = f'{self.user.nomor_induk}'
@@ -81,7 +71,7 @@ class Guru(models.Model):
 class Siswa(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='akun_siswa', null=True, blank=True)    
     nama = models.CharField(max_length=50, null=True, blank=True, default='')
-    gender = models.CharField(max_length=2, choices=GENDER_LIST, default=GENDER_LIST[0][0], null=True)
+    gender = models.CharField(max_length=2, choices=choice.GENDER_LIST, default=choice.GENDER_LIST[0][0], null=True)
     nisn = models.CharField(max_length=10, unique=True, editable=False,)
     tanggal_lahir = models.DateField(null=True, blank=True)
     kelas = models.ForeignKey("Kelas.Kelas", on_delete=models.PROTECT, related_name='siswa', null=True, blank=True)    

@@ -6,13 +6,15 @@
         <a href="{% url 'detail-guru' kelas.walikelas.nip %}"><h2>{{ kelas.walikelas }}</h2></a>
     {% endif %}   
     <p>Jumlah Siswa: {{ count_siswa }}</p>     
-    <p><a href="{% url 'list-siswa' %}?kelas={{kelas}}">List Siswa</a></p>    
+    <p><a href="{% url 'list-siswa-kelas' kelas %}">List Siswa</a></p>    
     <p>List Mata Pelajaran:<br>
     {% for matapelajaran in list_matapelajaran %}
         <small>{{matapelajaran}}</small><br>
     {% endfor %}
     </p>
 
-    <br><a href="{% url 'edit-kelas' kelas.nama %}">Edit Kelas</a>
-    <br><a href="{% url 'delete-kelas' kelas.nama %}">Delete Kelas</a>
+    {% if kelas.walikelas.nama == user.akun_guru.nama or user.level == 'A' %}
+        <br><a href="{% url 'edit-kelas' kelas.nama %}">Edit Kelas</a>
+        <br><a href="{% url 'delete-kelas' kelas.nama %}">Delete Kelas</a>
+    {% endif %}
 {% endblock content %}

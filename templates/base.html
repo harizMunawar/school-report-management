@@ -19,5 +19,16 @@
 
         {% block extra_script %}
         {% endblock extra_script %}
+
+        {% if user.is_authenticated %}
+            {% if user.akun_guru %}
+                haloluya {{user.akun_guru.nama}},<br>
+                anda adalah seorang guru
+            {% elif user.akun_siswa %}
+                haloluya {{user.akun_siswa.nama}},<br>
+                anda adalah seorang siswa
+            {% endif %}
+        {% endif %}
+        
     </body>
 </html>
