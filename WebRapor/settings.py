@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     'django.contrib.admindocs',
     
     'rest_framework',
+    'pwa',
 
     'User',
     'Kelas',
@@ -121,8 +122,12 @@ REST_FRAMEWORK = {
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
+STATICFILES_DIRS = [
+    BASE_DIR/'static/',
+]
+
 STATIC_URL = '/static/'
-STATIC_ROOT = BASE_DIR/'static/'
+STATIC_ROOT = BASE_DIR/'staticfiles/'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR/'media/'
 
@@ -132,3 +137,35 @@ LOGIN_REDIRECT_URL = 'dashboard'
 LOGOUT_REDIRECT_URL = 'login'
 
 LOGIN_URL = 'login'
+
+# PWA Configuration
+
+PWA_APP_NAME = 'Raporku'
+PWA_APP_DESCRIPTION = "Aplikasi Manajemen Rapor"
+PWA_APP_THEME_COLOR = '#0A0302'
+PWA_APP_BACKGROUND_COLOR = '#ffffff'
+PWA_APP_DISPLAY = 'standalone'
+PWA_APP_SCOPE = '/'
+PWA_APP_ORIENTATION = 'portrait'
+PWA_APP_START_URL = '/'
+PWA_APP_STATUS_BAR_COLOR = 'default'
+PWA_APP_ICONS = [
+    {
+        'src': '/static/images/my_app_icon.png',
+        'sizes': '160x160'
+    }
+]
+PWA_APP_ICONS_APPLE = [
+    {
+        'src': '/static/images/my_apple_icon.png',
+        'sizes': '160x160'
+    }
+]
+PWA_APP_SPLASH_SCREEN = [
+    {
+        'src': '/static/images/icons/splash-640x1136.png',
+        'media': '(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)'
+    }
+]
+PWA_APP_DIR = 'ltr'
+PWA_APP_LANG = 'en-US'
