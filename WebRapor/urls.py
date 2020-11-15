@@ -15,6 +15,7 @@ urlpatterns = [
     path('', include('User.urls')),
     path('', include('Nilai.urls')),
     path('', include('Rapor.urls')),
+    path('', include('pwa.urls')),
     
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 # handler404 = 'backend.views.error_404'
