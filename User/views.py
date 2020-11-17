@@ -154,26 +154,10 @@ class ListSiswa(ListView):
             if 'search' in self.request.GET and self.request.GET['search'] != '':
                 return Siswa.objects.filter(
                     Q(nama__icontains=self.request.GET['search']) | 
-                    Q(nisn__istartswith=self.request.GET['search']))
+                    Q(nisn__istartswith=self.request.GET['search']) |
+                    Q(kelas__nama__icontains=self.request.GET['search']))
             else:            
                 return Siswa.objects.all().order_by('-kelas', 'nama')
-        except ObjectDoesNotExist:
-            raise Http404
-
-class ListSiswa_Kelas(ListView):
-    paginate_by = 10
-    template_name = 'user/siswa/list-siswa.html'
-
-    def get_queryset(self):        
-        try:
-            kelas = Kelas.objects.get(nama=self.kwargs['kelas'])
-            if 'search' in self.request.GET and self.request.GET['search'] != '':
-                return Siswa.objects.filter(
-                    Q(nama__icontains=self.request.GET['search']) | 
-                    Q(nisn__istartswith=self.request.GET['search']),
-                    Q(kelas=kelas))
-            else:
-                return Siswa.objects.filter(kelas=kelas).order_by('-kelas', 'nama')
         except ObjectDoesNotExist:
             raise Http404
 
