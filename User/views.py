@@ -10,9 +10,7 @@ from Kelas.models import Jurusan, Kelas
 from Nilai.models import MataPelajaran, NilaiMataPelajaran
 
 from django.core.exceptions import ObjectDoesNotExist
-from django.utils.datastructures import MultiValueDictKeyError
 from django.http import Http404
-from collections import Counter
 from django.conf import settings
 from django.contrib.auth import hashers
 from Helpers import zip_pelnilai, get_finished_siswa, get_unfinished_siswa
@@ -210,6 +208,18 @@ class ListGuru(ListView):
     queryset = Guru.objects.all().order_by('-kelas', 'nama')
     paginate_by = 10
     template_name = 'user/guru/list-guru.html'
+
+    def get_queryset(self):        
+        try:            
+            if 'search' in self.request.GET and self.request.GET['search'] != '':
+                return Guru.objects.filter(
+                    Q(nama__icontains=self.request.GET['search']) | 
+                    Q(nip__istartswith=self.request.GET['search']) |
+                    Q(kelas__nama__icontains=self.request.GET['search']))
+            else:
+                return Guru.objects.all().order_by('nama')
+        except ObjectDoesNotExist:
+            raise Http404
 
 def bulk_insert(request):
     f = open(settings.BASE_DIR/'student.json')

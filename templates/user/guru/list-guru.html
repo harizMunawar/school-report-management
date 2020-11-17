@@ -1,6 +1,9 @@
 {% extends "base.html" %}
 
 {% block content %}
+    <form method="get">
+        <input type="text" id="search" name="search" placeholder="Search Name or NIP or Kelas">
+    </form>
     {% for guru in object_list %}
         <a href="{% url 'detail-guru' guru.nip %}">{{guru}}&nbsp;</a>
         {% if guru.kelas %}
@@ -10,5 +13,5 @@
         <h2>No Guru Yet</h2>
     {% endfor %}
 
-    {% include "components/pagination.html" %}
+    {% include "components/pagination.html" with extra_param='search' extra_value=request.GET.search %}
 {% endblock content %}
