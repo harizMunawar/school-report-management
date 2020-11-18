@@ -3,7 +3,8 @@ from . import views
 from django.contrib.auth import views as auth_views
 
 urlpatterns = [
-    path('', views.dashboard, name="dashboard"),        
+    path('', views.dashboard, name="dashboard"),
+    path('user/', include([
         path('register/<level>/', views.Registration.as_view(), name='registration'),
         path('create/<level>/', views.CreateUser.as_view(), name='create-user'),
         path('edit/<nomor_induk>/', views.EditUser.as_view(), name='edit-user'),             
@@ -20,6 +21,7 @@ urlpatterns = [
             path('<nomor_induk>/', views.DetailGuru.as_view(), name='detail-guru'),
             path('<nomor_induk>/edit', views.EditGuru.as_view(), name='edit-guru'),
             # path('<nomor_induk>/delete', views.DeleteGuru.as_view(), name='delete-guru'),
-        ])),                   
+        ])),
+    ])),                          
     path('bulk-insert/', views.bulk_insert, name='bulk-insert'),
 ]
