@@ -89,7 +89,7 @@ def create_user_profile(sender, instance, created, **kwargs):
         if instance.level == 'G':
             Guru.objects.create(user = instance)
             akun = Guru.objects.get(user=instance)
-        elif instance.level == 'S':
+        else:
             Siswa.objects.create(user = instance)
             akun = Siswa.objects.get(user=instance)
         akun.nama = f"{instance.username}"

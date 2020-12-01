@@ -22,3 +22,29 @@ HURUF_LIST = [
     ('C', 'C'),
     ('D', 'D')
 ]
+
+JENIS_PELAJARAN = [
+    ('NA', 'Normatif Adaptif'),
+    ('Produktif', 'Produktif'),        
+    ('Mulok', 'Muatan Lokal'),
+]
+
+JENIS_EKSKUL = [
+    ('Kepemimpinan', 'Kepemimpinan'),
+    ('Keagamaan', 'Keagamaan'),
+    ('Kesenian', 'Kesenian'),
+    ('Olahraga', 'Olahraga'),              
+    ('Lain-Lain', 'Lain-Lain'),
+]
+
+NILAI_EKSKUL = [
+    ('A+', 'A+'),
+    ('A', 'A'),
+    ('A-', 'A-'),
+    ('B+', 'B+'),
+    ('B', 'B'),
+    ('B-', 'B-'),
+    ('C+', 'C+'),
+    ('C', 'C'),
+    ('C-', 'C-'),
+]
