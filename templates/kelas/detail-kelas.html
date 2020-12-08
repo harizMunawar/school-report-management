@@ -6,7 +6,7 @@
         <a href="{% url 'detail-guru' kelas.walikelas.nip %}"><h2>{{ kelas.walikelas }}</h2></a>
     {% endif %}   
     <p>Jumlah Siswa: {{ count_siswa }}</p>     
-    <p><a href="{% url 'list-siswa-kelas' kelas %}">List Siswa</a></p>    
+    <p><a href="{% url 'list-siswa' %}?search={{kelas.nama}}">List Siswa</a></p>    
     <p>List Mata Pelajaran:<br>
     {% for matapelajaran in list_matapelajaran %}
         <small>{{matapelajaran}}</small><br>

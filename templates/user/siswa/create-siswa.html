@@ -3,9 +3,7 @@
 {% block content %}
     <form method="post">
         {% csrf_token %}
-                 
-        {{ user_form.as_p }}
-        {{ guru_form.as_p }}
+        {{ siswa_form.as_p }}             
         <input type="submit" value="Create">
     </form>
 {% endblock content %}

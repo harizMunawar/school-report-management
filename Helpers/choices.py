@@ -6,7 +6,8 @@ GENDER_LIST = [
 USER_ROLE = [
     ('A','Admin'),
     ('G','Guru'),
-    ('S','Siswa')
+    ('T','Staf TU'),
+    ('S','Siswa'),
 ]
 
 TINGKAT_LIST = [

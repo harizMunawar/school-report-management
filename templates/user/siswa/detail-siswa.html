@@ -5,7 +5,7 @@
     {% if user.nomor_induk == siswa.nisn or user.level == 'A' %}
         <small>
             <a href="{% url 'edit-siswa' siswa.nisn %}">Edit</a>
-            <a href="{% url 'delete-user' siswa.nisn %}">Delete</a>
+            <a href="{% url 'delete-siswa' siswa.nisn %}">Delete</a>
             <a href="{% url 'edit-user' siswa.nisn %}">Edit Akun</a>
         </small>
     {% endif %}

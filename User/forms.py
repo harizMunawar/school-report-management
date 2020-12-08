@@ -11,7 +11,7 @@ class RegistrationForm(UserCreationForm):
 
     class Meta:
         model = User
-        fields = ("nomor_induk", "password1", "password2")
+        fields = ("nomor_induk", "password1", "password2", "level")
 
     def save(self, commit=True):
         user = super().save(commit=False)
@@ -25,7 +25,7 @@ class EditUserForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ('nomor_induk', 'username', 'level', 'password', 'is_active')
+        fields = ('nomor_induk', 'nama', 'level', 'password', 'is_active')
 
     def clean_password(self):
         return self.initial["password"]
@@ -41,7 +41,8 @@ class GuruForm(forms.ModelForm):
 class SiswaForm(forms.ModelForm):
     class Meta:
         model = Siswa        
-        fields = ('nama',  'gender', 'tanggal_lahir', 'kelas')
+        fields = '__all__'
+        # ('nama',  'nis', 'nisn', 'gender', 'tanggal_lahir', 'kelas')
         widgets = {
             'tanggal_lahir': DateInput()
         }

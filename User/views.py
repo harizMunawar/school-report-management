@@ -29,63 +29,6 @@ def dashboard(request):
     if active_user.level == 'A':
         return render(request, 'user/dashboard/dashboard.html')
 
-class Registration(View):
-    def get(self, request, level=''):
-        user_form = RegistrationForm()
-        level = level.lower()
-        if level == 'guru' or level == 'g':
-            extra_form = GuruForm()
-        elif level == 'siswa' or level == 'g':
-            extra_form = SiswaForm()
-        else:
-            raise Http404
-
-        context = {
-            'user_form' : user_form,
-            'extra_form' : extra_form,
-        }
-
-        return render(request, 'user/registration/register.html', context)
-
-    def post(self, request, level=''):
-        user_form = RegistrationForm(request.POST)
-        level = level.lower()
-        if level == 'guru' or level == 'g':
-            extra_form = GuruForm(request.POST)
-        elif level == 'siswa' or level == 'g':
-            extra_form = SiswaForm(request.POST)
-        else:
-            raise Http404
-
-        if user_form.is_valid() and extra_form.is_valid():            
-            user = user_form.save(commit=False)            
-            user.username = f"{level.upper()[0]}-{extra_form.cleaned_data.get('nama').title().split(' ')[-1]}-{user_form.cleaned_data.get('nomor_induk')}"
-            user.level = level.upper()[0]
-            user.save()
-
-            if level == 'siswa' or level == 's':
-                user.akun_siswa.nama = extra_form.cleaned_data.get('nama')
-                user.akun_siswa.nis = extra_form.cleaned_data.get('nis')
-                user.akun_siswa.tanggal_lahir = extra_form.cleaned_data.get('tanggal_lahir')
-                user.akun_siswa.gender = extra_form.cleaned_data.get('gender')
-                user.akun_siswa.kelas = extra_form.cleaned_data.get('kelas')
-                user.akun_siswa.jurusan = extra_form.cleaned_data.get('jurusan')
-                user.akun_siswa.save()
-
-            elif level == 'guru' or level == 'g':
-                user.akun_guru.nama = extra_form.cleaned_data.get('nama')
-                user.akun_guru.tanggal_lahir = extra_form.cleaned_data.get('tanggal_lahir')
-                user.akun_guru.gender = extra_form.cleaned_data.get('gender')
-                user.akun_guru.save()
-
-            return redirect('dashboard')
-        else:
-            context = {
-                'user_form' : user_form,
-                'extra_form' : extra_form,
-            }
-            return render(request, 'user/registration/register.html', context)
-
 class CreateUser(CreateView):
     model = User
     template_name = 'user/dashboard/create-user.html'
@@ -121,11 +64,31 @@ class DeleteUser(DeleteView):
     slug_url_kwarg = 'nomor_induk'
     success_url = '/'
 
+class CreateSiswa(View):
+    def post(self, request):
+        siswa_form = SiswaForm(request.POST)
+
+        if siswa_form.is_valid():
+            siswa = siswa_form.save()
+
+            return redirect('/admin')
+        else:
+            context = {
+                'siswa_form': siswa_form,                
+            }
+            return render(request, 'user/siswa/create-siswa.html', context)
+
+    def get(self, request):
+        context = {
+            'siswa_form': SiswaForm(),
+        }
+        return render(request, 'user/siswa/create-siswa.html', context)
+
 class DetailSiswa(DetailView):
     model = Siswa
     template_name = 'user/siswa/detail-siswa.html'
     slug_field = 'nisn'
-    slug_url_kwarg = 'nomor_induk'
+    slug_url_kwarg = 'nisn'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -141,7 +104,7 @@ class EditSiswa(UpdateView):
     template_name = 'user/siswa/edit-siswa.html'
     form_class = SiswaForm
     slug_field = 'nisn'
-    slug_url_kwarg = 'nomor_induk'
+    slug_url_kwarg = 'nisn'
     success_url = '/'
 
 class ListSiswa(ListView):
@@ -161,11 +124,44 @@ class ListSiswa(ListView):
         except ObjectDoesNotExist:
             raise Http404
 
+class DeleteSiswa(DeleteView):
+    model = Siswa
+    template_name = 'user/siswa/delete-siswa.html'
+    slug_field = 'nisn'
+    slug_url_kwarg = 'nisn'
+    success_url = '/'
+
+class CreateGuru(View):
+    def post(self, request):
+        user_form = RegistrationForm(request.POST)
+        guru_form = GuruForm(request.POST)
+
+        if user_form.is_valid() and guru_form.is_valid():
+            user = user_form.save()
+            guru = guru_form.save(commit=False)
+            guru.user = user
+            guru.save()
+
+            return redirect('/admin')
+        else:
+            context = {
+                'user_form': user_form,
+                'guru_form': guru_form
+            }
+            return render(request, 'user/guru/create-guru.html', context)
+
+    def get(self, request):
+        context = {
+            'user_form': RegistrationForm(),
+            'guru_form': GuruForm()
+        }
+        return render(request, 'user/guru/create-guru.html', context)
+
 class DetailGuru(DetailView):
     model = Guru
     template_name = 'user/guru/detail-guru.html'
     slug_field = 'nip'
-    slug_url_kwarg = 'nomor_induk'
+    slug_url_kwarg = 'nip'
     context_object_name = 'guru'
 
     def get_context_data(self, **kwargs):
@@ -185,7 +181,7 @@ class EditGuru(UpdateView):
     template_name = 'user/guru/edit-guru.html'
     form_class = GuruForm
     slug_field = 'nip'
-    slug_url_kwarg = 'nomor_induk'
+    slug_url_kwarg = 'nip'
     success_url = '/'
 
 class ListGuru(ListView):
@@ -204,6 +200,13 @@ class ListGuru(ListView):
                 return Guru.objects.all().order_by('nama')
         except ObjectDoesNotExist:
             raise Http404
+
+class DeleteGuru(DeleteView):
+    model = Guru
+    template_name = 'user/guru/delete-guru.html'
+    slug_field = 'nip'
+    slug_url_kwarg = 'nip'
+    success_url = '/'
 
 def bulk_insert(request):
     f = open(settings.BASE_DIR/'student.json')

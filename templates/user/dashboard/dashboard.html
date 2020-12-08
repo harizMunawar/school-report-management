@@ -41,8 +41,8 @@
 
     {% elif user.level == 'A' %}
         <a href="{% url 'bulk-insert' %}">BULK INSERT NOWWWW</a>
-        <a href="{% url 'create-user' 'siswa' %}">Create siswa</a>
-        <a href="{% url 'create-user' 'guru' %}">Create guru</a>
+        <a href="{% url 'create-siswa' %}">Create siswa</a>
+        <a href="{% url 'create-guru' %}">Create guru</a>
         <a href="{% url 'create-kelas' %}">Create kelas</a>
 
         <a href="{% url 'list-siswa' %}"><h2>List Siswa</h2></a>  

@@ -6,7 +6,7 @@
     {% if user.nomor_induk == guru.nip or user.level == 'A' %}
         <small>
             <a href="{% url 'edit-guru' guru.nip %}">Edit</a>
-            <a href="{% url 'delete-user' guru.nip %}">Delete</a>
+            <a href="{% url 'delete-guru' guru.nip %}">Delete</a>
             <a href="{% url 'edit-user' guru.nip %}">Edit Akun</a>
         </small>
     {% endif %}
