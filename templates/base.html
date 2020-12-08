@@ -1,8 +1,14 @@
 {% load pwa %}
+{% include 'include/css.html' %}
+{% include 'include/js.html' %}
 <!DOCTYPE html>
 <html lang="en">
     <head>
         {% progressive_web_app_meta %}
+
+        {% block stylesheet %}
+        {% endblock stylesheet %}
+
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Rapor Manajemen</title>
@@ -23,7 +29,7 @@
         {% block footer %}
         {% endblock footer %}
 
-        {% block extra_script %}
-        {% endblock extra_script %}
+        {% block script %}
+        {% endblock script %}
     </body>
 </html>
