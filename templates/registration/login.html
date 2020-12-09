@@ -1,11 +1,29 @@
 {% extends 'base.html' %}
+
 {% block content %}
-<h2>Login</h2>
+    <div class="container mt-5">
+        <div class="mx-auto p-5" style="width: 400px;">
+            <center>
+                <h2 class="fw-bolder mb-5">Login</h2>
+            </center>
+            <form method="post">
+                {% csrf_token %}
+                <center>
+                    <div class="mb-3">
+                        <label for="{{ form.username.id_for_label }}">Nomor Induk</label><br>
+                        {{form.username}}
+                    </div>
 
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="Login">
-</form>
-
+                    <div class="mb-3">
+                        <label for="{{ form.password.id_for_label }}">Password</label><br>
+                        {{form.password}}
+                    </div>
+                    
+                    <small>{{form.non_field_errors.as_text}}</small><br>
+                    <input class="btn button" type="submit" value="Login">
+                </center>
+                
+            </form>
+        </div>
+    </div>
 {% endblock %}
