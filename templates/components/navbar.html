@@ -1,0 +1,30 @@
+{% block navbar %}
+    <nav class="navbar">
+        <ul class="navbar-nav">
+            <li class="logo">
+                <a href="{% url 'list-siswa' %}?search={{kelas}}" class="nav-link">
+                    <ion-icon name="newspaper"></ion-icon>
+                    <span class="link-text">Judul App Apa?</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="{% url 'list-siswa' %}?search={{kelas}}" class="nav-link">
+                    <ion-icon name="list-outline"></ion-icon>
+                    <span class="link-text">List Siswa</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="{% url 'list-siswa' %}?search={{kelas}}" class="nav-link">
+                    <ion-icon name="people-outline"></ion-icon>
+                    <span class="link-text">Status Kelas</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="{% url 'logout' %}" class="nav-link">
+                    <ion-icon name="log-out-outline"></ion-icon>
+                    <span class="link-text">Logout</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+{% endblock navbar %}

@@ -7,7 +7,6 @@ USER_ROLE = [
     ('A','Admin'),
     ('G','Guru'),
     ('T','Staf TU'),
-    ('S','Siswa'),
 ]
 
 TINGKAT_LIST = [
