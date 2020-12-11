@@ -3,7 +3,10 @@ from . import views
 from django.contrib.auth import views as auth_views
 
 urlpatterns = [
-    path('', views.dashboard, name="dashboard"),
+    path('dashboard/', views.dashboard, name="dashboard"),
+    # Dashboard Guru
+    path('list-siswa/', views.DGListSiswa.as_view(), name="dg-list-siswa"),
+    path('status-kelas/', views.DGStatusKelas.as_view(), name="dg-status-kelas"),
     path('user/', include([
         path('edit/<nomor_induk>/', views.EditUser.as_view(), name='edit-user'),             
         path('edit/password/<nomor_induk>/', views.EditPassword.as_view(), name='edit-password'),

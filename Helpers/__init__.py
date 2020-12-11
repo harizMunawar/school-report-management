@@ -22,7 +22,10 @@ def get_nilai(siswa):
     return [nilai(pelajaran['id'], siswa) for pelajaran in matapelajaran]   
 
 def zip_siswa_status(list_siswa):    
-    return [(siswa, False) if 0 in get_nilai(siswa) else (siswa, True) for siswa in list_siswa]    
+    return [(siswa, False) if 0 in get_nilai(siswa) else (siswa, True) for siswa in list_siswa]
+
+def get_status(list_siswa):
+    return [False if 0 in get_nilai(siswa) else True for siswa in list_siswa]
 
 def get_finished_siswa(list_siswa):
     return [siswa for siswa in list_siswa if not 0 in get_nilai(siswa)]

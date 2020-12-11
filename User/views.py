@@ -4,6 +4,8 @@ from django.views.generic import View, FormView, DetailView, UpdateView, CreateV
 from django.contrib.auth.decorators import login_required
 from User.forms import RegistrationForm, GuruForm, SiswaForm, EditUserForm
 from django.contrib.auth.views import PasswordChangeView
+from django.utils.decorators import method_decorator
+from django.core.paginator import Paginator
 
 from User.models import User, Siswa, Guru
 from Kelas.models import Jurusan, Kelas
@@ -13,7 +15,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404
 from django.conf import settings
 from django.contrib.auth import hashers
-from Helpers import zip_pelnilai, get_finished_siswa, get_unfinished_siswa
+from Helpers import zip_pelnilai, get_finished_siswa, get_unfinished_siswa, get_status, zip_siswa_status
 import json
 from django.db.models import Q
 
@@ -23,8 +25,8 @@ def dashboard(request):
     if active_user.level == 'G':  
         return redirect(reverse('detail-guru', args=[active_user.nomor_induk]))
 
-    if active_user.level == 'S':
-        return redirect(reverse('detail-siswa', args=[active_user.nomor_induk]))
+    if active_user.level == 'T':
+        return render(request, 'user/dashboard/dashboard.html')
 
     if active_user.level == 'A':
         return render(request, 'user/dashboard/dashboard.html')
@@ -226,3 +228,59 @@ def bulk_insert(request):
                 print(f'Total {pointer} rows of data has been inserted successfully')
     f.close()
     return render(request, 'user/dashboard/dashboard.html')
+
+@method_decorator(login_required, name='dispatch')
+class DGListSiswa(View):
+    def get(self, request):
+        list_siswa = []
+        logged_guru = Guru.objects.get(nip=request.user.akun_guru.nip)
+        if logged_guru.user.level == 'G':
+            if logged_guru.kelas:
+                if 'search' in request.GET and request.GET['search'] != '':
+                    list_siswa = Siswa.objects.filter(
+                            Q(kelas=request.user.akun_guru.kelas) &
+                            (
+                                Q(nama__icontains=request.GET['search']) | 
+                                Q(nisn__istartswith=request.GET['search'])
+                            )
+                        ).order_by('nama')
+                else:
+                    list_siswa = Siswa.objects.filter(kelas=request.user.akun_guru.kelas).order_by('nama')
+            else:
+                list_siswa = Siswa.objects.none()
+        else:
+            return redirect(reverse('dashboard'))
+
+        paginator = Paginator(list_siswa, 10)
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+
+        context = {
+            'siswa_status': zip(page_obj, get_status(list_siswa)),
+            'page_obj': page_obj,
+        }
+
+        return render(request, 'dashboard/guru/list-siswa.html', context)
+
+@method_decorator(login_required, name='dispatch')
+class DGStatusKelas(View):
+    def get(self, request):
+        logged_guru = Guru.objects.get(nip=request.user.akun_guru.nip)        
+
+        if logged_guru.user.level == 'G':
+            if logged_guru.kelas:
+                kelas = Kelas.objects.get(walikelas=logged_guru)
+                list_siswa = Siswa.objects.filter(kelas=kelas).order_by('nama')
+                context = {
+                    'kelas': kelas,
+                    'list_matapelajaran': MataPelajaran.objects.filter(kelas=kelas),
+                    'count_siswa': Siswa.objects.filter(kelas=kelas).count(),
+                    'siswa_finished': get_finished_siswa(list_siswa),
+                    'siswa_unfinished': get_unfinished_siswa(list_siswa)
+                }
+
+                return render(request, 'dashboard/guru/status-kelas.html', context)
+            else:
+                return render(request, 'dashboard/kelas-not-found.html')
+        else:
+            return redirect(reverse('dashboard'))
