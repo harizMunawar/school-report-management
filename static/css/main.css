@@ -29,12 +29,13 @@ body::-webkit-scrollbar-thumb{
 main{
     margin-left: 5rem;
     padding: 1rem;
+    transition: ease 300ms;
 }
 
 .navbar{    
     position: fixed;
     background-color: var(--bg-primary);
-    transition: width 200ms ease;
+    transition: 300ms ease;
     margin: 0;
     padding: 0;
     align-items: unset;
@@ -51,10 +52,6 @@ main{
 
 .nav-item{
     width: 100%;    
-}
-
-.nav-item:last-child{
-    margin-top: auto;
 }
 
 .nav-link{
@@ -141,6 +138,10 @@ ion-icon{
     main{
         margin: 0;
     }
+
+    .nav-item:last-child{
+        margin-left: auto;
+    }
 }
 
 /* Large Screens */
@@ -158,5 +159,13 @@ ion-icon{
     .navbar:hover .link-text{
         display: block;
         color: #b0499f;
+    }
+
+    #navbar:hover + #main{
+        margin-left: 16rem;
+    }
+
+    .nav-item:last-child{
+        margin-top: auto;
     }
 }

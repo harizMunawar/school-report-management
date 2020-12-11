@@ -2,7 +2,7 @@
 
 {% block content %}
 {% include 'components/navbar.html' %}
-    <main>
+    <main id="main">
         <h1>{{guru.nama}}</h1>
 
         {% if user.nomor_induk == guru.nip or user.level == 'A' %}

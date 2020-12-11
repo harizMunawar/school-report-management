@@ -1,6 +1,4 @@
 {% load pwa %}
-{% include 'include/css.html' %}
-{% include 'include/js.html' %}
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -8,6 +6,7 @@
 
         {% block stylesheet %}
         {% endblock stylesheet %}
+        {% include 'include/css.html' %}
 
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -17,11 +16,10 @@
         {% block navbar %}
         {% endblock navbar %}
 
-        {% block content %}        
-        {% endblock content %}
-        <br>{% if user.is_authenticated %}
-            <a href="{% url 'logout' %}">Logout</a>
-        {% endif %}
+        <div class="content">
+            {% block content %}        
+            {% endblock content %}
+        </div>
 
         {% block pagination %}          
         {% endblock pagination %}
@@ -31,5 +29,6 @@
 
         {% block script %}
         {% endblock script %}
+        {% include 'include/js.html' %}
     </body>
 </html>
