@@ -1,44 +1,47 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h1>{{guru.nama}}</h1>
-
-    {% if user.nomor_induk == guru.nip or user.level == 'A' %}
-        <small>
-            <a href="{% url 'edit-guru' guru.nip %}">Edit</a>
-            <a href="{% url 'delete-guru' guru.nip %}">Delete</a>
-            <a href="{% url 'edit-user' guru.nip %}">Edit Akun</a>
-        </small>
-    {% endif %}
-
-    {% if kelas %}
-        <h2>Walikelas: <a href="{% url 'detail-kelas' kelas.nama %}">{{ kelas }}</a></h2>
-        <p>Jumlah Siswa Yang Di Walikan: {{count_siswa}}</p>
+{% include 'components/navbar.html' %}
+    <main id="main">
+        <h1>{{guru.nama}}</h1>
 
         {% if user.nomor_induk == guru.nip or user.level == 'A' %}
-            <p>Siswa Yang Sudah Lengkap Nilainya: 
-            {% for siswa in finished_siswa %}
-                <h5>
-                    <a href="{% url 'detail-siswa' siswa.nisn %}">{{siswa.nama}}</a>
-                    <a href="{% url 'list-nilai' siswa.nisn %}">Insert Nilai</a>                
-                    <a href="{% url 'export-pdf' siswa.nisn %}?action=download">Export PDF</a>
-                    <a target=_blank href="{% url 'export-pdf' siswa.nisn %}?action=preview">Preview PDF</a>             
-                </h5>
-            {% endfor %}
-            </p>
+            <small>
+                <a href="{% url 'edit-guru' guru.nip %}">Edit</a>
+                <a href="{% url 'delete-guru' guru.nip %}">Delete</a>
+                <a href="{% url 'edit-user' guru.nip %}">Edit Akun</a>
+            </small>
+        {% endif %}
 
-            <p>Siswa Yang Belum Lengkap Nilainya:
-                {% for siswa in unfinished_siswa %}
+        {% if kelas %}
+            <h2>Walikelas: <a href="{% url 'detail-kelas' kelas.nama %}">{{ kelas }}</a></h2>
+            <p>Jumlah Siswa Yang Di Walikan: {{count_siswa}}</p>
+
+            {% if user.nomor_induk == guru.nip or user.level == 'A' %}
+                <p>Siswa Yang Sudah Lengkap Nilainya: 
+                {% for siswa in finished_siswa %}
                     <h5>
                         <a href="{% url 'detail-siswa' siswa.nisn %}">{{siswa.nama}}</a>
-                        <a href="{% url 'list-nilai' siswa.nisn %}">Insert Nilai</a>
+                        <a href="{% url 'list-nilai' siswa.nisn %}">Insert Nilai</a>                
+                        <a href="{% url 'export-pdf' siswa.nisn %}?action=download">Export PDF</a>
+                        <a target=_blank href="{% url 'export-pdf' siswa.nisn %}?action=preview">Preview PDF</a>             
                     </h5>
                 {% endfor %}
-            </p>
+                </p>
 
-            {% if finished_siswa and not unfinished_siswa %}
-                <a href="{% url 'bundle-export' kelas.nama %}">Download Bundle PDF</a>
+                <p>Siswa Yang Belum Lengkap Nilainya:
+                    {% for siswa in unfinished_siswa %}
+                        <h5>
+                            <a href="{% url 'detail-siswa' siswa.nisn %}">{{siswa.nama}}</a>
+                            <a href="{% url 'list-nilai' siswa.nisn %}">Insert Nilai</a>
+                        </h5>
+                    {% endfor %}
+                </p>
+
+                {% if finished_siswa and not unfinished_siswa %}
+                    <a href="{% url 'bundle-export' kelas.nama %}">Download Bundle PDF</a>
+                {% endif %}
             {% endif %}
         {% endif %}
-    {% endif %}
+    </main>
 {% endblock content %}

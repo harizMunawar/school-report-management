@@ -3,7 +3,7 @@ from django.urls import reverse_lazy
 from django.views.generic import View, FormView, DetailView, UpdateView, CreateView, DeleteView, ListView
 from django.contrib.auth.decorators import login_required
 from User.forms import RegistrationForm, GuruForm, SiswaForm, EditUserForm
-from django.contrib.auth.views import PasswordChangeView
+from django.contrib.auth.views import PasswordChangeView, redirect_to_login
 from django.utils.decorators import method_decorator
 from django.core.paginator import Paginator
 
@@ -22,7 +22,7 @@ from django.db.models import Q
 @login_required
 def dashboard(request):
     active_user = User.objects.get(nomor_induk = request.user.nomor_induk)
-    if active_user.level == 'G':  
+    if active_user.level == 'G' or active_user.level == 'T':  
         return redirect(reverse('detail-guru', args=[active_user.nomor_induk]))
 
     if active_user.level == 'T':
