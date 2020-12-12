@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>{{ kelas.nama }}</h1>    
+    <p>Jumlah Siswa: {{ count_siswa }}</p>     
+    <p><a href="{% url 'dg-list-siswa' %}">List Siswa</a></p>
+
+
+    <p>Siswa Yang Sudah Lengkap Nilainya: 
+    {% for siswa in siswa_finished %}
+        <h5>
+            <a href="{% url 'detail-siswa' siswa.nisn %}">{{siswa.nama}}</a>
+            <a href="{% url 'list-nilai' siswa.nisn %}">Insert Nilai</a>                
+            <a href="{% url 'export-pdf' siswa.nisn %}?action=download">Export PDF</a>
+            <a target=_blank href="{% url 'export-pdf' siswa.nisn %}?action=preview">Preview PDF</a>             
+        </h5>
+    {% endfor %}
+    </p>
+
+    <p>Siswa Yang Belum Lengkap Nilainya:
+        {% for siswa in siswa_unfinished %}
+            <h5>
+                <a href="{% url 'detail-siswa' siswa.nisn %}">{{siswa.nama}}</a>
+                <a href="{% url 'list-nilai' siswa.nisn %}">Insert Nilai</a>
+            </h5>
+        {% endfor %}
+    </p>
+
+    <p>List Mata Pelajaran:<br>
+    {% for matapelajaran in list_matapelajaran %}
+        <small>{{matapelajaran}}</small><br>
+    {% endfor %}
+    </p>
+
+
+
+    {% if kelas.walikelas.nama == user.akun_guru.nama or user.level == 'A' %}
+        <br><a href="{% url 'edit-kelas' kelas.nama %}">Edit Kelas</a>
+        <br><a href="{% url 'delete-kelas' kelas.nama %}">Delete Kelas</a>
+    {% endif %}
+{% endblock content %}

@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <form method="get">
+        <input type="text" id="search" name="search" placeholder="Search Name or NISN">
+    </form>
+    <div id="list">
+        {% for siswa, status in siswa_status %}
+            <a href="{% url 'detail-siswa' siswa.nisn %}">{{siswa}}&nbsp;</a>
+            <a href="{% url 'detail-kelas' siswa.kelas.nama %}">{{siswa.kelas}}</a>&nbsp;
+            {% if status %}
+                Nilai Sudah Tuntas
+            {% else %}
+                Nilai Belum Tuntas
+            {% endif %}
+            <br>
+        {% empty %}
+            <h2>No Siswa Yet</h2>
+        {% endfor %}    
+
+        {% include "components/pagination.html" with extra_param='search' extra_value=request.GET.search %}
+    </div>
+{% endblock content %}
