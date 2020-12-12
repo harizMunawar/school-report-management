@@ -22,8 +22,18 @@ from django.db.models import Q
 @login_required
 def dashboard(request):
     active_user = User.objects.get(nomor_induk = request.user.nomor_induk)
-    if active_user.level == 'G' or active_user.level == 'T':  
-        return redirect(reverse('detail-guru', args=[active_user.nomor_induk]))
+    if active_user.level == 'G':        
+        guru = Guru.objects.get(nip=active_user.akun_guru.nip)
+        context = {
+            'guru': guru,        
+        }
+
+        try:
+            kelas = Kelas.objects.get(walikelas=active_user.akun_guru)
+            context.update({'kelas': kelas})
+        except ObjectDoesNotExist:
+            pass
+        return render(request, 'dashboard/guru/dashboard.html', context)
 
     if active_user.level == 'T':
         return render(request, 'user/dashboard/dashboard.html')
@@ -235,19 +245,20 @@ class DGListSiswa(View):
         list_siswa = []
         logged_guru = Guru.objects.get(nip=request.user.akun_guru.nip)
         if logged_guru.user.level == 'G':
-            if logged_guru.kelas:
+            try:
+                kelas = Kelas.objects.get(walikelas=logged_guru)
                 if 'search' in request.GET and request.GET['search'] != '':
                     list_siswa = Siswa.objects.filter(
-                            Q(kelas=request.user.akun_guru.kelas) &
+                            Q(kelas=logged_guru.kelas) &
                             (
                                 Q(nama__icontains=request.GET['search']) | 
                                 Q(nisn__istartswith=request.GET['search'])
                             )
                         ).order_by('nama')
                 else:
-                    list_siswa = Siswa.objects.filter(kelas=request.user.akun_guru.kelas).order_by('nama')
-            else:
-                list_siswa = Siswa.objects.none()
+                    list_siswa = Siswa.objects.filter(kelas=logged_guru.kelas).order_by('nama')
+            except ObjectDoesNotExist:
+                return render(request, 'dashboard/guru/kelas-not-found.html')
         else:
             return redirect(reverse('dashboard'))
 
@@ -268,7 +279,7 @@ class DGStatusKelas(View):
         logged_guru = Guru.objects.get(nip=request.user.akun_guru.nip)        
 
         if logged_guru.user.level == 'G':
-            if logged_guru.kelas:
+            try:
                 kelas = Kelas.objects.get(walikelas=logged_guru)
                 list_siswa = Siswa.objects.filter(kelas=kelas).order_by('nama')
                 context = {
@@ -280,7 +291,39 @@ class DGStatusKelas(View):
                 }
 
                 return render(request, 'dashboard/guru/status-kelas.html', context)
-            else:
-                return render(request, 'dashboard/kelas-not-found.html')
+            except ObjectDoesNotExist:
+                return render(request, 'dashboard/guru/kelas-not-found.html')
         else:
             return redirect(reverse('dashboard'))
+
+@method_decorator(login_required, name='dispatch')
+class DGEditProfil(View):
+    def get(self, request):
+        guru = Guru.objects.get(nip=request.user.akun_guru.nip)
+
+        initial = {
+            'nama': guru.nama,
+            'gender': guru.gender,
+            'tanggal_lahir': guru.tanggal_lahir
+        }
+        context = {
+            'form': GuruForm(initial=initial)
+        }
+        return render(request, 'dashboard/guru/edit-profil.html', context)
+
+    def post(self, request):
+        form = GuruForm(request.POST)
+
+        context = {
+            'form': form,
+        }
+
+        if form.is_valid():
+            guru = Guru.objects.get(nip=request.user.nomor_induk)
+            guru.nama = form.cleaned_data.get('nama')
+            guru.gender = form.cleaned_data.get('gender')
+            guru.tanggal_lahir = form.cleaned_data.get('tanggal_lahir')
+            guru.save()
+            return redirect(reverse('dashboard'))
+        else:
+           return render(request, 'dashboard/guru/edit-profil.html', context) 

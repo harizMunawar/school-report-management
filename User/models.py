@@ -61,8 +61,7 @@ class Guru(models.Model):
     tanggal_lahir = models.DateField(null=True, blank=True)
     gender = models.CharField(max_length=2, choices=choice.GENDER_LIST, default=choice.GENDER_LIST[0][0])
 
-    def save(self, *args, **kwargs):
-        self.nip = f'{self.user.nomor_induk}'
+    def save(self, *args, **kwargs):        
         super(Guru, self).save(*args, **kwargs)
 
     def __str__(self):
@@ -100,6 +99,17 @@ class Siswa(models.Model):
 #         instance.is_staff = True
 #         instance.is_superuser = True
 #         instance.save()
+
+@receiver(post_save, sender=User)
+def edit_user(sender, instance, created, **kwargs):
+    if created and instance.level == 'A':
+        instance.is_admin = True
+        instance.is_staff = True
+        instance.is_superuser = True
+        instance.save()
+
+    if instance.level == 'G' or instance.level == 'T':
+        instance.akun_guru.nip = instance.nomor_induk
 
 @receiver(post_save, sender=Siswa)
 def edit_siswa(sender, instance, created, **kwargs):

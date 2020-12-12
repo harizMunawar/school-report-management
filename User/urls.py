@@ -4,9 +4,12 @@ from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     path('dashboard/', views.dashboard, name="dashboard"),
-    # Dashboard Guru
+    
+    # Dashboard Guru (DG Stands for Dashboard Guru. Means each accesible page from dashboard when you logged in as a Guru)
     path('list-siswa/', views.DGListSiswa.as_view(), name="dg-list-siswa"),
     path('status-kelas/', views.DGStatusKelas.as_view(), name="dg-status-kelas"),
+    path('edit-profil/', views.DGEditProfil.as_view(), name="dg-edit-profil"),
+    
     path('user/', include([
         path('edit/<nomor_induk>/', views.EditUser.as_view(), name='edit-user'),             
         path('edit/password/<nomor_induk>/', views.EditPassword.as_view(), name='edit-password'),
