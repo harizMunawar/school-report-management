@@ -1,20 +1,26 @@
 {% extends 'base.html' %}
+{% load widget_tweaks %}
 
 {% block content %}
     {% include 'components/navbar.html' %}
     <main id="main">
-        <form method="post">
-            {% csrf_token %}
-            {% for field in form %}
-                <div class="fieldWrapper">
-                    {{ field.errors }}
-                    {{ field.label_tag }} {{ field }}
-                    {% if field.help_text %}
-                        <p class="help">{{ field.help_text|safe }}</p>
-                    {% endif %}
-                </div>
-            {% endfor %}
-            <input type="submit" value="Update">
-        </form>
+        <center>
+            <div class="edit-form">
+                <form method="post">
+                    {% csrf_token %}
+                    <h3 class="mb-5">Edit Profil</h3>
+                    {% for field in form %}
+                        <div class="mb-3">
+                            {{field.label_tag}}
+                            {% render_field field|add_class:"form-control" %}                    
+                            {% if field.help_text %}
+                                <p class="help">{{ field.help_text|safe }}</p>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                    <input type="submit" class="form-control" value="Update">
+                </form>
+            </div>
+        </center>
     </main>
 {% endblock content %}

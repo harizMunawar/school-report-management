@@ -136,10 +136,14 @@ label{
 
 .kelas-404{
     text-align: center;
-    top: 50%;
-    left: 50%;
 }
 
 .kelas-404-icon{
     font-size: 4rem;
+}
+
+/* Edit Profil Form */
+
+.edit-form{
+    max-width: 50vh;
 }
