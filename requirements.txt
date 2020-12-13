@@ -8,6 +8,7 @@ cssselect2==0.3.0
 defusedxml==0.6.0
 Django==3.1
 django-pwa==1.0.10
+django-widget-tweaks==1.4.8
 djangorestframework==3.11.1
 html5lib==1.1
 isort==5.5.3

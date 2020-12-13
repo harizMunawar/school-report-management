@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     
     'rest_framework',
     'pwa',
+    'widget_tweaks',
 
     'User',
     'Kelas',
