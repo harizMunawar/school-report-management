@@ -7,11 +7,11 @@ from datetime import datetime
 import Helpers.choices as choice
 
 class UserManager(BaseUserManager):
-    def create_user(self, nomor_induk, level, nama, password=None):
-        if not nomor_induk or not level or not nama:
+    def create_user(self, nomor_induk, level, password=None):
+        if not nomor_induk or not level:
             raise ValueError("Data is not complete")        
 
-        user = self.model(nomor_induk = nomor_induk, level = level, nama = nama)
+        user = self.model(nomor_induk = nomor_induk, level = level)
         if user.level == 'A':
             user.is_admin = True
             user.is_staff = True
@@ -20,8 +20,8 @@ class UserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, nomor_induk, level, nama, password):
-        user = self.create_user(nomor_induk = nomor_induk, password = password, level = level, nama = nama)
+    def create_superuser(self, nomor_induk, level, password):
+        user = self.create_user(nomor_induk = nomor_induk, password = password, level = level)
         user.is_admin = True
         user.is_staff = True
         user.is_superuser = True
@@ -31,7 +31,6 @@ class UserManager(BaseUserManager):
 class User(AbstractBaseUser):    
     nomor_induk = models.CharField(verbose_name="Nomor Induk", unique=True, max_length=18)
     level = models.CharField(choices=choice.USER_ROLE, max_length=1)
-    nama = models.CharField(max_length=10)
     date_joined = models.DateTimeField(verbose_name='date joined', auto_now_add=True)
     last_login = models.DateTimeField(verbose_name='last login', auto_now=True)
     is_admin = models.BooleanField(default=False)    
@@ -40,12 +39,12 @@ class User(AbstractBaseUser):
     is_active = models.BooleanField(default=True)
 
     USERNAME_FIELD = 'nomor_induk'
-    REQUIRED_FIELDS = ['level', 'nama']
+    REQUIRED_FIELDS = ['level']
 
     objects = UserManager()
 
     def __str__(self):
-        return self.nama
+        return self.nomor_induk
 
     def has_perm(self, perm, obj=None):
         return self.is_admin
@@ -108,8 +107,10 @@ def edit_user(sender, instance, created, **kwargs):
         instance.is_superuser = True
         instance.save()
 
-    if instance.level == 'G' or instance.level == 'T':
-        instance.akun_guru.nip = instance.nomor_induk
+    if created and (instance.level == 'G' or instance.level == 'T'):
+        akun_guru = Guru.objects.create(user = instance)
+        akun_guru.nip = instance.nomor_induk
+        akun_guru.save()
 
 @receiver(post_save, sender=Siswa)
 def edit_siswa(sender, instance, created, **kwargs):
@@ -117,6 +118,4 @@ def edit_siswa(sender, instance, created, **kwargs):
 
 @receiver(post_save, sender=Guru)
 def edit_guru(sender, instance, created, **kwargs):
-    akun = User.objects.get(nomor_induk=instance.nip)
-    akun.nama = instance.nama
-    akun.save()
+    pass

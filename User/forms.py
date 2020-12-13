@@ -25,7 +25,7 @@ class EditUserForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ('nomor_induk', 'nama', 'level', 'password', 'is_active')
+        fields = ('nomor_induk', 'level', 'password', 'is_active')
 
     def clean_password(self):
         return self.initial["password"]

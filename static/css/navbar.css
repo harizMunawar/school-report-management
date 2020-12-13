@@ -12,6 +12,7 @@ main{
     margin-left: 5rem;
     padding: 1rem;
     transition: ease 300ms;
+    z-index: -1;
 }
 
 .navbar{    
@@ -109,6 +110,7 @@ main{
 
     main{
         margin: 0;
+        padding-top: 1rem;
     }
 
     .nav-item:last-child{

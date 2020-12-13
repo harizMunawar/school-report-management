@@ -49,10 +49,15 @@ body::-webkit-scrollbar-thumb, ::-webkit-scrollbar-thumb{
     color: rgb(235, 147, 162);
 }
 
+ion-icon{
+    contain: none;
+}
+
 /* Searchbar */
 
 .searchbar{
     width: 200px;
+    margin-top: -5vh;
 }
 
 .field{
@@ -109,17 +114,32 @@ label{
     position: absolute;
     transform: translateY(-2rem);
     transform-origin: 0%;
-    transition: transform 400ms;
+    transition: all 400ms;
 }
 
 .field:focus-within .label{
     transform: scale(0.8) translateY(-5rem);
+    color: var(--text-primary);
 }
 
 .input:not(:placeholder-shown) + .label{
     transform: scale(0.8) translateY(-5rem);
+    color: var(--text-primary);
 }
 
 .input:-webkit-autofill + .label{
     transform: scale(0.8) translateY(-5rem);
+    color: var(--text-primary);
+}
+
+/* Kelas 404 */
+
+.kelas-404{
+    text-align: center;
+    top: 50%;
+    left: 50%;
+}
+
+.kelas-404-icon{
+    font-size: 4rem;
 }

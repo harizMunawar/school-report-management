@@ -13,7 +13,7 @@ class UserAdmin(BaseUserAdmin):
     list_display = ('nomor_induk', 'level')
     list_filter = ('level',)
     fieldsets = (
-        ('Account Profile', {'fields': ('nomor_induk', 'nama', 'password')}),
+        ('Account Profile', {'fields': ('nomor_induk', 'password')}),
         ('Account Status', {'fields': ('is_active',)})
     )
 
