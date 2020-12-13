@@ -4,6 +4,7 @@
     --text-secondary: #ececec;
     --bg-primary: #23232e;
     --bg-secondary: #141418;
+    --theme-color: #b0499f;
     --transition-speed: 600ms;
 }
 
@@ -23,7 +24,7 @@ body::-webkit-scrollbar-track{
 }
 
 body::-webkit-scrollbar-thumb{
-    background: #b0499f;
+    background: var(--theme-color);
 }
 
 main{
@@ -69,7 +70,7 @@ main{
 }
 
 ion-icon{
-    color: #b0499f;
+    color: var(--theme-color);
     transition: var(--transition-speed);
 }
 
@@ -103,16 +104,6 @@ ion-icon{
 
 .navbar:hover .logo ion-icon{
     transform: rotate(-180deg);
-}
-
-.button{    
-    border-radius: 0%;
-}
-
-.button:hover, .button:focus{
-    color: white;
-    background-color: black;
-    box-shadow: none !important;
 }
 
 /* Small Screens */
@@ -158,7 +149,7 @@ ion-icon{
 
     .navbar:hover .link-text{
         display: block;
-        color: #b0499f;
+        color: var(--theme-color);
     }
 
     #navbar:hover + #main{
