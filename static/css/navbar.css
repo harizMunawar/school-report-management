@@ -50,12 +50,12 @@ main{
     background-color: var(--bg-secondary);
 }
 
-ion-icon{
+.icon-nav{
     color: var(--theme-color);
     transition: var(--transition-speed);
 }
 
-.nav-link ion-icon{
+.nav-link .icon-nav{
     min-width: 2rem;
     height: 2rem;
     margin: 0 1.5rem;
@@ -78,12 +78,12 @@ ion-icon{
     width: 100%;
 }
 
-.logo ion-icon{
+.logo .icon-nav{
     transform: rotate(0deg);
     transition: transform var(--transition-speed);
 }
 
-.navbar:hover .logo ion-icon{
+.navbar:hover .logo .icon-nav{
     transform: rotate(-180deg);
 }
 
