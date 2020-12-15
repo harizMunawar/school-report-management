@@ -11,6 +11,6 @@
   <h3 align="center">School Report Management</h3>
 
   <p align="center">
-    This Repo is deprecated and no longer maintenanced. For further update about this app please go to <a href="github.com/harizMunawar/REI">this repo</a>
+    This Repo is deprecated and no longer maintenanced. For further update about this app please go to [this repo](https://github.com/harizMunawar/REI)
     <br />
 </p><br>
